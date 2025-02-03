@@ -1,4 +1,4 @@
-# CloudNest - Modern Storage Management Solution
+# CloudNest - Solução Moderna de Gerenciamento de Armazenamento
 
 <div align="center">
   <br />
@@ -12,97 +12,97 @@
     <img src="https://img.shields.io/badge/-Appwrite-black?style=for-the-badge&logoColor=white&logo=appwrite&color=FD366E" alt="appwrite" />
   </div>
 
-<h3 align="center">Next-Generation Storage and File Sharing Platform</h3>
+<h3 align="center">Plataforma de Próxima Geração para Compartilhamento de Arquivos</h3>
 
    <div align="center">
-     Developed by <a href="https://github.com/heryckmp" target="_blank"><b>Erick Moreira</b></a>
+     Desenvolvido por <a href="https://github.com/heryckmp" target="_blank"><b>Erick Moreira</b></a>
     </div>
 </div>
 
-## 📋 Table of Contents
+## 📋 Índice
 
-1. 🚀 [Introduction](#introduction)
-2. ⚙️ [Tech Stack](#tech-stack)
-3. 🔋 [Features](#features)
-4. 🌟 [Innovations](#innovations)
-5. 🤸 [Quick Start](#quick-start)
-6. 🎨 [Design System](#design-system)
-7. 🔒 [Security](#security)
+1. 🚀 [Introdução](#introdução)
+2. ⚙️ [Tecnologias](#tecnologias)
+3. 🔋 [Funcionalidades](#funcionalidades)
+4. 🌟 [Inovações](#inovações)
+5. 🤸 [Início Rápido](#início-rápido)
+6. 🎨 [Sistema de Design](#sistema-de-design)
+7. 🔒 [Segurança](#segurança)
 
-## 🚀 Introduction
+## 🚀 Introdução
 
-CloudNest is a cutting-edge storage management and file sharing platform that revolutionizes how users interact with their digital content. Built with the latest web technologies, it offers a seamless, secure, and intuitive experience for managing and sharing files in the cloud.
+CloudNest é uma plataforma de gerenciamento de armazenamento e compartilhamento de arquivos de última geração que revoluciona a forma como os usuários interagem com seu conteúdo digital. Construída com as mais recentes tecnologias web, oferece uma experiência segura, intuitiva e sem complicações para gerenciar e compartilhar arquivos na nuvem.
 
-## ⚙️ Tech Stack
+## ⚙️ Tecnologias
 
-- **Frontend**: React 19 with Next.js 15
+- **Frontend**: React 19 com Next.js 15
 - **Backend**: Appwrite Cloud
-- **Styling**: TailwindCSS with ShadCN
-- **Language**: TypeScript
-- **State Management**: React Context API
-- **Authentication**: Appwrite Auth
+- **Estilização**: TailwindCSS com ShadCN
+- **Linguagem**: TypeScript
+- **Gerenciamento de Estado**: React Context API
+- **Autenticação**: Appwrite Auth
 
-## 🔋 Features
+## 🔋 Funcionalidades
 
-- **Intelligent File Management**
-  - Advanced file organization with smart categorization
-  - Bulk operations support
-  - Version history tracking
+- **Gerenciamento Inteligente de Arquivos**
+  - Organização avançada com categorização inteligente
+  - Suporte a operações em lote
+  - Histórico de versões
 
-- **Enhanced Security**
-  - End-to-end encryption for sensitive files
-  - Two-factor authentication
-  - Granular permission controls
+- **Segurança Aprimorada**
+  - Criptografia ponta a ponta para arquivos sensíveis
+  - Autenticação de dois fatores
+  - Controles granulares de permissão
 
-- **Modern UI/UX**
-  - Dark/Light theme support
-  - Responsive design for all devices
-  - Intuitive drag-and-drop interface
+- **Interface Moderna**
+  - Suporte a tema claro/escuro
+  - Design responsivo para todos os dispositivos
+  - Interface intuitiva com arrastar e soltar
 
-- **Smart Search**
-  - Full-text search capabilities
-  - File content indexing
-  - Advanced filtering options
+- **Busca Inteligente**
+  - Capacidade de busca em texto completo
+  - Indexação de conteúdo de arquivos
+  - Opções avançadas de filtro
 
-- **Real-time Collaboration**
-  - File sharing with customizable permissions
-  - Team workspace support
-  - Activity tracking and notifications
+- **Colaboração em Tempo Real**
+  - Compartilhamento de arquivos com permissões personalizáveis
+  - Suporte a espaço de trabalho em equipe
+  - Rastreamento de atividades e notificações
 
-## 🌟 Innovations
+## 🌟 Inovações
 
-CloudNest introduces several innovative features that set it apart:
+CloudNest introduz várias características inovadoras que o destacam:
 
-1. **Smart Storage Optimization**
-   - Automatic duplicate detection
-   - Intelligent compression algorithms
-   - Predictive caching
+1. **Otimização Inteligente de Armazenamento**
+   - Detecção automática de duplicatas
+   - Algoritmos inteligentes de compressão
+   - Cache preditivo
 
-2. **AI-Powered Organization**
-   - Automatic file categorization
-   - Content-based suggestions
-   - Smart tagging system
+2. **Organização Baseada em IA**
+   - Categorização automática de arquivos
+   - Sugestões baseadas em conteúdo
+   - Sistema inteligente de tags
 
-3. **Enhanced Security Measures**
-   - Zero-knowledge encryption
-   - Blockchain-verified file integrity
-   - Advanced threat detection
+3. **Medidas Avançadas de Segurança**
+   - Criptografia de conhecimento zero
+   - Integridade de arquivos verificada por blockchain
+   - Detecção avançada de ameaças
 
-## 🤸 Quick Start
+## 🤸 Início Rápido
 
-1. **Clone the repository**
+1. **Clone o repositório**
 ```bash
 git clone https://github.com/heryckmp/cloudnest.git
 cd cloudnest
 ```
 
-2. **Install dependencies**
+2. **Instale as dependências**
 ```bash
 npm install
 ```
 
-3. **Configure environment variables**
-Create a `.env.local` file:
+3. **Configure as variáveis de ambiente**
+Crie um arquivo `.env.local`:
 ```env
 NEXT_PUBLIC_APPWRITE_ENDPOINT="https://cloud.appwrite.io/v1"
 NEXT_PUBLIC_APPWRITE_PROJECT=""
@@ -113,33 +113,33 @@ NEXT_PUBLIC_APPWRITE_BUCKET=""
 NEXT_APPWRITE_KEY=""
 ```
 
-4. **Start the development server**
+4. **Inicie o servidor de desenvolvimento**
 ```bash
 npm run dev
 ```
 
-## 🎨 Design System
+## 🎨 Sistema de Design
 
-CloudNest features a comprehensive design system that ensures consistency and accessibility:
+CloudNest possui um sistema de design abrangente que garante consistência e acessibilidade:
 
-- **Color Palette**: Carefully selected colors for both light and dark themes
-- **Typography**: Modern, readable font hierarchy
-- **Components**: Reusable, accessible UI components
-- **Animations**: Smooth, purposeful motion design
+- **Paleta de Cores**: Cores cuidadosamente selecionadas para temas claro e escuro
+- **Tipografia**: Hierarquia de fontes moderna e legível
+- **Componentes**: Componentes de UI reutilizáveis e acessíveis
+- **Animações**: Design de movimento suave e proposital
 
-## 🔒 Security
+## 🔒 Segurança
 
-Security is at the core of CloudNest's architecture:
+A segurança está no núcleo da arquitetura do CloudNest:
 
-- End-to-end encryption
-- Regular security audits
-- GDPR compliance
-- Secure file sharing protocols
-- Advanced access control
+- Criptografia ponta a ponta
+- Auditorias regulares de segurança
+- Conformidade com LGPD
+- Protocolos seguros de compartilhamento de arquivos
+- Controle avançado de acesso
 
 ---
 
 <div align="center">
-  <h3>Developer</h3>
+  <h3>Desenvolvedor</h3>
   <a href="https://github.com/heryckmp">GitHub</a>
 </div>
