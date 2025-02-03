@@ -3,7 +3,7 @@
 <div align="center">
   <br />
     <img 
-      src="./public/assets/images/cloudnest-banner.png" 
+      src="https://raw.githubusercontent.com/heryckmp/CloudNest/main/public/assets/images/cloudnest-banner.png" 
       alt="CloudNest - Modern Storage Management Solution"
       style="width: 100%; max-width: 1200px; border-radius: 10px;"
     />
