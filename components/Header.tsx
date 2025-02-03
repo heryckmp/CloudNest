@@ -3,7 +3,12 @@ import { SignOutButton } from "@/components/SignOutButton";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { UserButton } from "@/components/UserButton";
 
-export function Header() {
+interface HeaderProps {
+  userId: string;
+  accountId: string;
+}
+
+export default function Header({ userId, accountId }: HeaderProps) {
   return (
     <header className="header">
       <Search />
