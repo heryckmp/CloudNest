@@ -3,8 +3,13 @@
 import Image from "next/image";
 import { useUser } from "@/hooks/useUser";
 
-export function UserButton() {
-  const { user } = useUser();
+interface UserButtonProps {
+  userId: string;
+  accountId: string;
+}
+
+export function UserButton({ userId, accountId }: UserButtonProps) {
+  const { user } = useUser({ userId, accountId });
 
   if (!user) return null;
 

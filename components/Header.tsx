@@ -14,7 +14,7 @@ export default function Header({ userId, accountId }: HeaderProps) {
       <Search />
       <div className="header-wrapper">
         <ThemeToggle />
-        <UserButton />
+        <UserButton userId={userId} accountId={accountId} />
         <SignOutButton />
       </div>
     </header>
