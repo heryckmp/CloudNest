@@ -134,7 +134,7 @@
     @apply mx-auto max-w-7xl px-5;
   }
   .primary-btn {
-    @apply bg-[#3B82F6] hover:bg-[#2563eb] transition-all rounded-full button !important;
+    @apply bg-[#3B82F6] hover:bg-[#2563eb] text-white font-medium !important;
   }
   .flex-center {
     @apply flex items-center justify-center;
@@ -477,18 +477,18 @@
 }
 
 .dark {
-  @apply bg-[#2A3B53];
+  @apply bg-[#1a2b45];
   
   .sidebar {
-    @apply bg-[#334766] border-[#3D547A];
+    @apply bg-[#1f3256] border-[#2a4270];
   }
   
   .sidebar-nav-item {
-    @apply text-[#E1E7F0] hover:bg-[#3D547A] hover:text-white;
+    @apply text-[#E1E7F0] hover:bg-[#2a4270] hover:text-white;
   }
   
   .shad-active {
-    @apply bg-[#FFB5C5] text-white;
+    @apply bg-[#FFB5C5] text-white hover:bg-[#FFA5B8];
   }
   
   .nav-icon {
@@ -500,38 +500,63 @@
   }
   
   .sidebar-user-info {
-    @apply border-t border-[#3D547A];
+    @apply border-t border-[#2a4270];
   }
   
   .mobile-header {
-    @apply bg-[#334766] border-[#3D547A];
+    @apply bg-[#1f3256] border-[#2a4270];
   }
   
   .mobile-nav-item {
-    @apply text-[#E1E7F0] hover:bg-[#3D547A] hover:text-white;
+    @apply text-[#E1E7F0] hover:bg-[#2a4270] hover:text-white;
   }
   
   .mobile-sign-out-button {
-    @apply bg-[#3D547A] text-white hover:bg-[#4A6491];
+    @apply bg-[#2a4270] text-white hover:bg-[#35548f];
   }
   
   .file-card {
-    @apply bg-[#334766] border-[#3D547A];
+    @apply bg-[#1f3256] border-[#2a4270];
   }
   
   .file-options {
-    @apply bg-[#2A3B53];
+    @apply bg-[#1a2b45];
   }
   
   .file-option {
-    @apply hover:bg-[#3D547A];
+    @apply hover:bg-[#2a4270];
   }
   
   .file-input {
-    @apply bg-[#334766] border-[#3D547A] text-white;
+    @apply bg-[#1f3256] border-[#2a4270] text-white;
   }
   
   .upload-zone {
-    @apply bg-[#334766] border-[#3D547A];
+    @apply bg-[#1f3256] border-[#2a4270];
   }
+
+  .form-submit-button {
+    @apply bg-[#FFB5C5] hover:bg-[#FFA5B8] text-[#1a2b45] font-medium;
+  }
+
+  .main-content {
+    @apply bg-[#1a2b45] !important;
+  }
+
+  .dashboard-summary-card {
+    @apply bg-[#1f3256] !important;
+  }
+
+  .dashboard-recent-files {
+    @apply bg-[#1f3256] !important;
+  }
+}
+
+/* Move primary-btn outside of .dark selector */
+.primary-btn {
+  @apply bg-[#3B82F6] hover:bg-[#2563eb] text-white font-medium !important;
+}
+
+.dark .primary-btn {
+  @apply bg-[#FFB5C5] hover:bg-[#FFA5B8] text-[#1a2b45] !important;
 }
