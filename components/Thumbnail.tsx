@@ -19,30 +19,12 @@ const Thumbnail = ({
 }: Props) => {
   const isImage = type === "image" && extension !== "svg";
   const defaultIcon = `/assets/icons/file-${type}.svg`;
-  const imageSrc = isImage && url ? url : defaultIcon;
-
-  if (!imageSrc) {
-    return (
-      <figure className={cn("thumbnail", className)}>
-        <Image
-          src={defaultIcon}
-          alt="file icon"
-          width={100}
-          height={100}
-          className={cn(
-            "size-8 object-contain",
-            imageClassName
-          )}
-        />
-      </figure>
-    );
-  }
 
   return (
     <figure className={cn("thumbnail", className)}>
-      {isImage ? (
+      {isImage && url ? (
         <Image
-          src={imageSrc}
+          src={url}
           alt="thumbnail"
           width={100}
           height={100}
@@ -56,7 +38,7 @@ const Thumbnail = ({
         />
       ) : (
         <Image
-          src={imageSrc}
+          src={defaultIcon}
           alt="file icon"
           width={100}
           height={100}
