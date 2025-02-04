@@ -1,12 +1,14 @@
 import { getFiles, getTotalSpaceUsed } from "@/lib/actions/file.actions";
 import { getUsageSummary } from "@/lib/utils";
-import Image from "next/image";
 import Link from "next/link";
 import { Models } from "node-appwrite";
 import Thumbnail from "@/components/Thumbnail";
 import FormattedDateTime from "@/components/FormattedDateTime";
 import ActionDropdown from "@/components/ActionDropdown";
 import { Chart } from "@/components/Chart";
+import { DashboardCardSkeleton } from "@/components/DashboardCardSkeleton";
+import { CardSkeleton } from "@/components/CardSkeleton";
+import { Button } from "@/components/ui/button";
 
 const Dashboard = async () => {
   const files = await getFiles({ types: [], searchText: "", sort: "$createdAt-desc" });
@@ -27,26 +29,37 @@ const Dashboard = async () => {
         <Chart used={totalSpace.used} />
 
         <ul className="dashboard-summary-list">
-          {summary.map((item) => (
-            <li key={item.title} className="dashboard-summary-card">
-              <Image
-                src={item.icon}
-                alt={item.title}
-                width={190}
-                height={100}
-                className="summary-type-icon"
-              />
-              <p className="summary-type-size">{item.size}</p>
-              <p className="summary-type-title">{item.title}</p>
-            </li>
-          ))}
+          {summary.length === 0 ? (
+            <>
+              <DashboardCardSkeleton />
+              <DashboardCardSkeleton />
+              <DashboardCardSkeleton />
+              <DashboardCardSkeleton />
+            </>
+          ) : (
+            summary.map((item) => (
+              <li key={item.title} className="group dashboard-summary-card">
+                <div className={`card-icon ${item.title.toLowerCase()}-icon`}>
+                  {item.title === "Others" && <div />}
+                </div>
+                <p className="summary-type-size group-hover:scale-110">{item.size}</p>
+                <p className="summary-type-title group-hover:translate-y-1">{item.title}</p>
+              </li>
+            ))
+          )}
         </ul>
       </section>
 
       {/* Recent files uploaded */}
       <section className="dashboard-recent-files">
-        <h2 className="h3 xl:h2 text-light-100">Recent files uploaded</h2>
-        {files?.documents && files.documents.length > 0 ? (
+        <h2 className="h3 xl:h2 text-black dark:text-white">Recent files uploaded</h2>
+        {!files?.documents ? (
+          <div className="mt-5 flex flex-col gap-5">
+            <CardSkeleton />
+            <CardSkeleton />
+            <CardSkeleton />
+          </div>
+        ) : files.documents.length > 0 ? (
           <ul className="mt-5 flex flex-col gap-5">
             {files.documents.map((file: Models.Document) => (
               <Link

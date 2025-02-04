@@ -16,36 +16,38 @@ const SimpleChatComponent = () => {
     e.preventDefault();
     if (!input.trim()) return;
 
-    // Adiciona mensagem do usuário
-    const userMessage = { role: 'user', content: input };
+    const userMessage: Message = { role: 'user', content: input };
     setMessages(prev => [...prev, userMessage]);
     setInput('');
     setLoading(true);
 
     try {
-      const response = await fetch('https://api-inference.huggingface.co/models/google/flan-t5-large', {
+      const response = await fetch('/api/ai', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${process.env.NEXT_PUBLIC_HUGGINGFACE_API_KEY}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ inputs: input }),
+        body: JSON.stringify({ prompt: input }),
       });
 
       const data = await response.json();
       
-      // Adiciona resposta do assistente
-      const assistantMessage = {
+      if (data.error) {
+        throw new Error(data.error);
+      }
+      
+      const assistantMessage: Message = {
         role: 'assistant',
         content: Array.isArray(data) ? data[0].generated_text : data.generated_text
       };
       setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
       console.error('Erro:', error);
-      setMessages(prev => [...prev, {
+      const errorMessage: Message = {
         role: 'assistant',
         content: 'Desculpe, ocorreu um erro ao processar sua mensagem.'
-      }]);
+      };
+      setMessages(prev => [...prev, errorMessage]);
     }
 
     setLoading(false);

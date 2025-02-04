@@ -4,6 +4,7 @@ import { getFiles } from "@/lib/actions/file.actions";
 import { Models } from "node-appwrite";
 import Card from "@/components/Card";
 import { getFileTypesParams } from "@/lib/utils";
+import { CardSkeleton } from "@/components/CardSkeleton";
 
 const Page = async ({ searchParams, params }: SearchParamProps) => {
   const type = ((await params)?.type as string) || "";
@@ -33,7 +34,16 @@ const Page = async ({ searchParams, params }: SearchParamProps) => {
       </section>
 
       {/* Render the files */}
-      {files.total > 0 ? (
+      {!files?.documents ? (
+        <section className="file-list">
+          <CardSkeleton />
+          <CardSkeleton />
+          <CardSkeleton />
+          <CardSkeleton />
+          <CardSkeleton />
+          <CardSkeleton />
+        </section>
+      ) : files.total > 0 ? (
         <section className="file-list">
           {files.documents.map((file: Models.Document) => (
             <Card key={file.$id} file={file} />

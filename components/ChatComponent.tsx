@@ -11,6 +11,7 @@ const ChatComponent = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,31 +21,37 @@ const ChatComponent = () => {
     setMessages(prev => [...prev, userMessage]);
     setInput('');
     setLoading(true);
+    setError(null);
 
     try {
-      const response = await fetch('https://api-inference.huggingface.co/models/google/flan-t5-large', {
+      const response = await fetch('/api/ai', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${process.env.NEXT_PUBLIC_HUGGINGFACE_API_KEY}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ inputs: input }),
+        body: JSON.stringify({ prompt: input }),
       });
 
       const data = await response.json();
       
+      if (data.error) {
+        throw new Error(data.error);
+      }
+      
       const assistantMessage: Message = {
         role: 'assistant',
-        content: Array.isArray(data) ? data[0].generated_text : data.generated_text
+        content: data.generated_text
       };
       setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
       console.error('Erro:', error);
-      const errorMessage: Message = {
+      const errorMessage = error instanceof Error ? error.message : 'Erro desconhecido';
+      setError(errorMessage);
+      const assistantMessage: Message = {
         role: 'assistant',
-        content: 'Desculpe, ocorreu um erro ao processar sua mensagem.'
+        content: 'Desculpe, ocorreu um erro ao processar sua mensagem. Por favor, tente novamente.'
       };
-      setMessages(prev => [...prev, errorMessage]);
+      setMessages(prev => [...prev, assistantMessage]);
     }
 
     setLoading(false);
@@ -52,6 +59,11 @@ const ChatComponent = () => {
 
   return (
     <div className="flex flex-col gap-4 rounded-lg bg-white p-6 shadow-lg dark:bg-[#334766]">
+      {error && (
+        <div className="bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-300 p-3 rounded-lg text-sm">
+          Erro: {error}
+        </div>
+      )}
       <div className="flex flex-col gap-4 min-h-[400px] max-h-[600px] overflow-y-auto">
         {messages.map((message, index) => (
           <div
@@ -78,6 +90,7 @@ const ChatComponent = () => {
           onChange={(e) => setInput(e.target.value)}
           placeholder="Digite sua mensagem..."
           className="flex-1 rounded-lg border p-2 dark:bg-[#3D547A] dark:text-white dark:border-[#4A6491]"
+          disabled={loading}
         />
         <button
           type="submit"

@@ -31,6 +31,8 @@
 5. 🤸 [Início Rápido](#início-rápido)
 6. 🎨 [Sistema de Design](#sistema-de-design)
 7. 🔒 [Segurança](#segurança)
+8. 🤖 [Assistente AI](#assistente-ai)
+9. 🔄 [Atualizações Recentes](#atualizações-recentes)
 
 ## 🚀 Introdução
 
@@ -139,6 +141,46 @@ A segurança está no núcleo da arquitetura do CloudNest:
 - Conformidade com LGPD
 - Protocolos seguros de compartilhamento de arquivos
 - Controle avançado de acesso
+
+## 🤖 Assistente AI
+
+O CloudNest agora inclui um assistente AI integrado que oferece:
+
+- **Chat Interativo**: Interface de chat amigável para interação com IA
+- **Modelo Avançado**: Integração com o modelo BlenderBot da Hugging Face
+- **Respostas Contextuais**: Respostas inteligentes baseadas no contexto da conversa
+- **Tratamento de Erros**: Sistema robusto de tratamento de erros e feedback ao usuário
+- **Interface Responsiva**: Design adaptativo que funciona em qualquer dispositivo
+
+Para usar o assistente AI:
+1. Navegue até a seção AI Assistant
+2. Digite sua mensagem na caixa de texto
+3. Aguarde a resposta do assistente
+4. Continue a conversa naturalmente
+
+## 🔄 Atualizações Recentes
+
+### Versão 0.2.0 (Fevereiro 2024)
+
+1. **Novo Assistente AI**
+   - Implementação do chat com IA usando Hugging Face
+   - Interface de usuário moderna e responsiva
+   - Sistema de tratamento de erros aprimorado
+
+2. **Melhorias na Interface**
+   - Novos ícones animados para tipos de arquivo
+   - Efeitos hover aprimorados nos cards
+   - Correções no tema escuro
+
+3. **Otimizações Técnicas**
+   - Migração para App Router do Next.js
+   - Melhor tratamento de erros na API
+   - Correções de tipagem TypeScript
+
+4. **Segurança**
+   - Implementação segura de variáveis de ambiente
+   - Melhor proteção das chaves de API
+   - Validação aprimorada de requisições
 
 ---
 

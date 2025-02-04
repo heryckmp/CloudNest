@@ -4,8 +4,22 @@ import Thumbnail from "@/components/Thumbnail";
 import { convertFileSize } from "@/lib/utils";
 import FormattedDateTime from "@/components/FormattedDateTime";
 import ActionDropdown from "@/components/ActionDropdown";
+import { CardSkeleton } from "@/components/CardSkeleton";
 
-const Card = ({ file }: { file: Models.Document }) => {
+interface CardProps {
+  file?: Models.Document;
+  isLoading?: boolean;
+}
+
+const Card = ({ file, isLoading }: CardProps) => {
+  if (isLoading) {
+    return <CardSkeleton />;
+  }
+
+  if (!file) {
+    return null;
+  }
+
   return (
     <Link href={file.url} target="_blank" className="file-card">
       <div className="flex justify-between">
@@ -36,4 +50,5 @@ const Card = ({ file }: { file: Models.Document }) => {
     </Link>
   );
 };
+
 export default Card;
