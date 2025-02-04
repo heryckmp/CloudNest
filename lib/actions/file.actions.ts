@@ -10,6 +10,13 @@ import { getCurrentUser } from "@/lib/actions/user.actions";
 // Define os tipos permitidos para o campo type
 type FileType = "image" | "document" | "video" | "audio" | "other";
 
+interface FileError {
+  code?: number;
+  message?: string;
+  type?: string;
+  response?: unknown;
+}
+
 const getEnumFileType = (type: string): FileType => {
   const typeMap: Record<string, FileType> = {
     'image/jpeg': 'image',
@@ -33,7 +40,7 @@ export const uploadFile = async ({
   file,
   accountId,
   path,
-}: UploadFileProps) => {
+}: Omit<UploadFileProps, 'ownerId'>): Promise<boolean> => {
   try {
     console.log('Starting file upload process with:', {
       bucketId: appwriteConfig.bucketId,
@@ -63,7 +70,7 @@ export const uploadFile = async ({
         size: file.size
       });
 
-      const { type: mimeType, extension } = getFileType(file.name);
+      const { extension } = getFileType(file.name);
       const enumType = getEnumFileType(file.type);
 
       // Create file document
@@ -115,13 +122,14 @@ export const uploadFile = async ({
         revalidatePath(path);
         
         return true;
-      } catch (dbError: any) {
+      } catch (dbError) {
+        const error = dbError as FileError;
         console.error("Error creating file document:", {
-          error: dbError,
-          code: dbError?.code,
-          message: dbError?.message,
-          type: dbError?.type,
-          response: dbError?.response
+          error,
+          code: error.code,
+          message: error.message,
+          type: error.type,
+          response: error.response
         });
         
         // Cleanup: delete the uploaded file since document creation failed
@@ -130,23 +138,25 @@ export const uploadFile = async ({
         
         return false;
       }
-    } catch (storageError: any) {
+    } catch (storageError) {
+      const error = storageError as FileError;
       console.error("Error uploading file to storage:", {
-        error: storageError,
-        code: storageError?.code,
-        message: storageError?.message,
-        type: storageError?.type,
-        response: storageError?.response
+        error,
+        code: error.code,
+        message: error.message,
+        type: error.type,
+        response: error.response
       });
       return false;
     }
-  } catch (error: any) {
+  } catch (error) {
+    const err = error as FileError;
     console.error("Error in upload process:", {
       error,
-      code: error?.code,
-      message: error?.message,
-      type: error?.type,
-      response: error?.response,
+      code: err.code,
+      message: err.message,
+      type: err.type,
+      response: err.response,
       fileName: file.name,
       fileSize: file.size
     });
@@ -166,20 +176,15 @@ export const getFiles = async ({
     const [sortField, sortOrder] = sort.split("-");
     const queries: string[] = [];
 
-    // Adiciona a consulta de tipos apenas se houver tipos especificados
     if (types && types.length > 0) {
       queries.push(Query.equal("type", types));
     }
 
-    // Adiciona a busca por texto se houver
     if (searchText) {
       queries.push(Query.search("name", searchText));
     }
 
-    // Adiciona a ordenação
     queries.push(sortOrder === "asc" ? Query.orderAsc(sortField) : Query.orderDesc(sortField));
-    
-    // Adiciona o limite
     queries.push(Query.limit(limit));
 
     const files = await databases.listDocuments(

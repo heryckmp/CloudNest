@@ -8,7 +8,16 @@ import Thumbnail from "@/components/Thumbnail";
 
 const Dashboard = async () => {
   const files = await getFiles({ types: [], searchText: "", sort: "$createdAt-desc" });
-  const [totalSpace] = await Promise.all([getTotalSpaceUsed()]);
+  const totalSpace = await getTotalSpaceUsed();
+  
+  if (!totalSpace) {
+    return (
+      <main className="dashboard-container">
+        <p className="text-center text-gray-500">Carregando informações...</p>
+      </main>
+    );
+  }
+
   const summary = getUsageSummary(totalSpace);
   const usedPercentage = calculatePercentage(totalSpace.used);
 

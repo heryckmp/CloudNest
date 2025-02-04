@@ -4,7 +4,17 @@ import { Account, Avatars, Client, Databases, Storage } from "node-appwrite";
 import { appwriteConfig } from "@/lib/appwrite/config";
 import { cookies } from "next/headers";
 
-export const createSessionClient = async () => {
+interface AppwriteClient {
+  account: Account;
+  databases: Databases;
+}
+
+interface AdminClient extends AppwriteClient {
+  storage: Storage;
+  avatars: Avatars;
+}
+
+export const createSessionClient = async (): Promise<AppwriteClient> => {
   try {
     const client = new Client()
       .setEndpoint(appwriteConfig.endpointUrl)
@@ -33,7 +43,7 @@ export const createSessionClient = async () => {
   }
 };
 
-export const createAdminClient = async () => {
+export const createAdminClient = async (): Promise<AdminClient> => {
   try {
     console.log('Creating admin client with config:', {
       endpoint: appwriteConfig.endpointUrl,
@@ -76,12 +86,10 @@ export const createAdminClient = async () => {
         return new Avatars(client);
       },
     };
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error creating admin client:", {
       error,
-      message: error?.message,
-      code: error?.code,
-      type: error?.type,
+      message: error instanceof Error ? error.message : 'Unknown error',
       config: {
         hasEndpoint: !!appwriteConfig.endpointUrl,
         hasProjectId: !!appwriteConfig.projectId,
