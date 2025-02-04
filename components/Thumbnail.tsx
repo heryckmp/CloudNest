@@ -13,12 +13,30 @@ interface Props {
 const Thumbnail = ({
   type,
   extension,
-  url = "",
+  url,
   imageClassName,
   className,
 }: Props) => {
   const isImage = type === "image" && extension !== "svg";
-  const imageSrc = isImage && url ? url : `/assets/icons/file-${type}.svg`;
+  const defaultIcon = `/assets/icons/file-${type}.svg`;
+  const imageSrc = isImage && url ? url : defaultIcon;
+
+  if (!imageSrc) {
+    return (
+      <figure className={cn("thumbnail", className)}>
+        <Image
+          src={defaultIcon}
+          alt="file icon"
+          width={100}
+          height={100}
+          className={cn(
+            "size-8 object-contain",
+            imageClassName
+          )}
+        />
+      </figure>
+    );
+  }
 
   return (
     <figure className={cn("thumbnail", className)}>
