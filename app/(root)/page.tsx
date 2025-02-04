@@ -1,60 +1,44 @@
+import { getFiles, getTotalSpaceUsed } from "@/lib/actions/file.actions";
+import { getUsageSummary } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { Models } from "node-appwrite";
-
+import Thumbnail from "@/components/Thumbnail";
+import FormattedDateTime from "@/components/FormattedDateTime";
 import ActionDropdown from "@/components/ActionDropdown";
 import { Chart } from "@/components/Chart";
-import { FormattedDateTime } from "@/components/FormattedDateTime";
-import { Thumbnail } from "@/components/Thumbnail";
-import { Separator } from "@/components/ui/separator";
-import { getFiles, getTotalSpaceUsed } from "@/lib/actions/file.actions";
-import { convertFileSize, getUsageSummary } from "@/lib/utils";
 
 const Dashboard = async () => {
+  const files = await getFiles({ types: [], searchText: "", sort: "$createdAt-desc" });
+
   // Parallel requests
-  const [files, totalSpace] = await Promise.all([
-    getFiles({ types: [], limit: 10 }),
+  const [totalSpace] = await Promise.all([
     getTotalSpaceUsed(),
   ]);
 
-  // Get usage summary
-  const usageSummary = getUsageSummary(totalSpace);
+  const summary = getUsageSummary(totalSpace);
 
   return (
-    <div className="dashboard-container">
+    <main className="dashboard-container">
+      <div className="flex justify-between items-center w-full">
+        <h1 className="h2 text-black dark:text-white">Dashboard</h1>
+      </div>
       <section>
         <Chart used={totalSpace.used} />
 
-        {/* Uploaded file type summaries */}
         <ul className="dashboard-summary-list">
-          {usageSummary.map((summary) => (
-            <Link
-              href={summary.url}
-              key={summary.title}
-              className="dashboard-summary-card"
-            >
-              <div className="space-y-4">
-                <div className="flex justify-between gap-3">
-                  <Image
-                    src={summary.icon}
-                    width={100}
-                    height={100}
-                    alt="uploaded image"
-                    className="summary-type-icon"
-                  />
-                  <h4 className="summary-type-size">
-                    {convertFileSize(summary.size) || 0}
-                  </h4>
-                </div>
-
-                <h5 className="summary-type-title">{summary.title}</h5>
-                <Separator className="bg-light-400" />
-                <FormattedDateTime
-                  date={summary.latestDate}
-                  className="text-center"
-                />
-              </div>
-            </Link>
+          {summary.map((item) => (
+            <li key={item.title} className="dashboard-summary-card">
+              <Image
+                src={item.icon}
+                alt={item.title}
+                width={190}
+                height={100}
+                className="summary-type-icon"
+              />
+              <p className="summary-type-size">{item.size}</p>
+              <p className="summary-type-title">{item.title}</p>
+            </li>
           ))}
         </ul>
       </section>
@@ -62,7 +46,7 @@ const Dashboard = async () => {
       {/* Recent files uploaded */}
       <section className="dashboard-recent-files">
         <h2 className="h3 xl:h2 text-light-100">Recent files uploaded</h2>
-        {files.documents.length > 0 ? (
+        {files?.documents && files.documents.length > 0 ? (
           <ul className="mt-5 flex flex-col gap-5">
             {files.documents.map((file: Models.Document) => (
               <Link
@@ -94,7 +78,7 @@ const Dashboard = async () => {
           <p className="empty-list">No files uploaded</p>
         )}
       </section>
-    </div>
+    </main>
   );
 };
 

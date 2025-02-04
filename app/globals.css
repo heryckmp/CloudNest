@@ -8,7 +8,7 @@
   }
 
   body {
-    @apply bg-white text-dark-200 min-h-screen dark:bg-[#2A3B53] dark:text-white;
+    @apply bg-white text-gray-800 min-h-screen dark:bg-[#2A3B53] dark:text-gray-100;
   }
 
   /* Remove scrollbar */
@@ -93,40 +93,40 @@
 @layer utilities {
   /* ===== TYPOGRAPHY */
   .h1 {
-    @apply text-[34px] leading-[42px] font-bold;
+    @apply text-[34px] leading-[42px] font-bold text-black dark:text-white;
   }
   .h2 {
-    @apply text-[24px] leading-[36px] font-bold;
+    @apply text-[24px] leading-[36px] font-bold text-black dark:text-white;
   }
   .h3 {
-    @apply text-[20px] leading-[28px] font-semibold;
+    @apply text-[20px] leading-[28px] font-semibold text-black dark:text-white;
   }
   .h4 {
-    @apply text-[18px] leading-[20px] font-medium;
+    @apply text-[18px] leading-[20px] font-medium text-black dark:text-white;
   }
   .h5 {
-    @apply text-[16px] leading-[24px] font-semibold;
+    @apply text-[16px] leading-[24px] font-semibold text-black dark:text-white;
   }
   .subtitle-1 {
-    @apply text-[16px] leading-[24px] font-medium;
+    @apply text-[16px] leading-[24px] font-medium text-black dark:text-white;
   }
   .subtitle-2 {
-    @apply text-[14px] leading-[20px] font-semibold;
+    @apply text-[14px] leading-[20px] font-semibold text-black dark:text-white;
   }
   .body-1 {
-    @apply text-[16px] leading-[24px] font-normal;
+    @apply text-[16px] leading-[24px] font-normal text-black dark:text-white;
   }
   .body-2 {
-    @apply text-[14px] leading-[20px] font-normal;
+    @apply text-[14px] leading-[20px] font-normal text-black dark:text-white;
   }
   .button {
-    @apply text-[14px] leading-[20px] font-medium;
+    @apply text-[14px] leading-[20px] font-medium text-black dark:text-white !important;
   }
   .caption {
-    @apply text-[12px] leading-[16px] font-normal;
+    @apply text-[12px] leading-[16px] font-normal text-black dark:text-white;
   }
   .overline {
-    @apply text-[10px] leading-[14px] font-normal;
+    @apply text-[10px] leading-[14px] font-normal text-black dark:text-white;
   }
 
   /* ===== HELPER CLASSES */
@@ -152,10 +152,10 @@
     @apply flex h-[78px] flex-col justify-center rounded-xl border border-light-300 px-4 shadow-drop-1 bg-white !important;
   }
   .shad-form-label {
-    @apply text-dark-100 pt-2 body-2 w-full !important;
+    @apply text-black dark:text-white pt-2 body-2 w-full !important;
   }
   .shad-form-message {
-    @apply text-red body-2 ml-4 !important;
+    @apply text-destructive body-2 ml-4 !important;
   }
   .shad-alert-dialog {
     @apply space-y-4 max-w-[95%] sm:w-fit rounded-xl md:rounded-[30px] px-4 md:px-8 py-10 bg-white outline-none !important;
@@ -213,31 +213,31 @@
     @apply mt-6 grid grid-cols-1 gap-4 xl:mt-10 xl:grid-cols-2 xl:gap-9 !important;
   }
   .dashboard-summary-card {
-    @apply relative mt-6 rounded-[20px] bg-white p-5 transition-all hover:scale-105 !important;
+    @apply relative mt-6 rounded-[20px] bg-gray-50 dark:bg-gray-800 p-5 transition-all hover:scale-105 !important;
   }
   .summary-type-icon {
     @apply absolute -left-3 top-[-25px] z-10 w-[190px] object-contain !important;
   }
   .summary-type-size {
-    @apply h4 relative z-20 w-full text-right !important;
+    @apply h4 relative z-20 w-full text-right text-black dark:text-white !important;
   }
   .summary-type-title {
-    @apply h5 relative z-20 text-center !important;
+    @apply h5 relative z-20 text-center text-black dark:text-white !important;
   }
   .dashboard-recent-files {
-    @apply h-full rounded-[20px] bg-white p-5 xl:p-8 !important;
+    @apply h-full rounded-[20px] bg-gray-50 dark:bg-gray-800 p-5 xl:p-8 !important;
   }
   .recent-file-details {
     @apply flex w-full flex-col xl:flex-row xl:justify-between !important;
   }
   .recent-file-name {
-    @apply subtitle-2 line-clamp-1 w-full text-light-100 sm:max-w-[200px] lg:max-w-[250px] !important;
+    @apply subtitle-2 line-clamp-1 w-full text-black dark:text-white sm:max-w-[200px] lg:max-w-[250px] !important;
   }
   .recent-file-date {
-    @apply body-2 text-light-100/80 !important;
+    @apply body-2 text-gray-600 dark:text-gray-400 !important;
   }
   .empty-list {
-    @apply body-1 mt-10 text-center text-light-200 !important;
+    @apply body-1 mt-10 text-center text-black dark:text-white !important;
   }
 
   /* Type page */
@@ -259,16 +259,16 @@
     @apply body-2 shad-no-focus h-[52px] w-full rounded-full border px-4 shadow-drop-1 !important;
   }
   .delete-confirmation {
-    @apply text-center text-light-100 !important;
+    @apply text-black dark:text-white text-center !important;
   }
   .delete-file-name {
-    @apply font-medium text-brand-100 !important;
+    @apply font-semibold text-black dark:text-white !important;
   }
   .modal-cancel-button {
-    @apply h-[52px] flex-1 rounded-full bg-white text-light-100 hover:bg-transparent !important;
+    @apply bg-gray-200 text-black hover:bg-gray-300 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600 !important;
   }
   .modal-submit-button {
-    @apply primary-btn !mx-0 h-[52px] w-full flex-1 !important;
+    @apply bg-[#3B82F6] text-white hover:bg-[#2563eb] !important;
   }
 
   /* ActionsModalContent */
@@ -303,7 +303,7 @@
     @apply h1 text-center text-dark-100 dark:text-white md:text-left !important;
   }
   .form-submit-button {
-    @apply bg-[#3B82F6] hover:bg-[#2563eb] dark:bg-[#FFB5C5] dark:hover:bg-[#FFA5B8] transition-all rounded-full h-[66px] text-white !important;
+    @apply bg-[#3B82F6] hover:bg-[#2563eb] text-white !important;
   }
   .error-message {
     @apply body-2 mx-auto w-fit rounded-xl bg-red/5 px-8 py-4 text-center text-red !important;
@@ -311,10 +311,10 @@
 
   /* Card */
   .file-card {
-    @apply flex cursor-pointer flex-col gap-6 rounded-[18px] bg-white p-5 shadow-sm transition-all hover:shadow-drop-3 !important;
+    @apply flex cursor-pointer flex-col gap-6 rounded-[18px] bg-gray-50 dark:bg-gray-800 p-5 shadow-sm transition-all hover:shadow-drop-3 !important;
   }
   .file-card-details {
-    @apply flex flex-col gap-2 text-light-100 !important;
+    @apply flex flex-col gap-2 text-black dark:text-white !important;
   }
 
   /* Chart */
@@ -342,7 +342,7 @@
 
   /* FileUploader */
   .uploader-button {
-    @apply primary-btn h-[52px] gap-2 px-10 shadow-drop-1 !important;
+    @apply bg-[#3B82F6] text-white hover:bg-[#2563eb] h-[52px] gap-2 px-10 shadow-drop-1 !important;
   }
   .uploader-preview-list {
     @apply fixed bottom-10 right-10 z-50 flex size-full h-fit max-w-[480px] flex-col gap-3 rounded-[20px] bg-white p-7 shadow-drop-3 !important;
@@ -366,7 +366,7 @@
     @apply flex-center min-w-fit gap-4 !important;
   }
   .sign-out-button {
-    @apply flex-center h-[52px] min-w-[54px] items-center rounded-full bg-[#3B82F6]/10 p-0 text-[#3B82F6] dark:bg-[#FFB5C5]/10 dark:text-[#FFB5C5] shadow-none transition-all hover:bg-[#3B82F6]/20 dark:hover:bg-[#FFB5C5]/20 !important;
+    @apply flex-center h-[52px] min-w-[54px] items-center rounded-full bg-[#3B82F6] text-white hover:bg-[#2563eb] dark:bg-[#3B82F6] dark:text-white dark:hover:bg-[#2563eb] shadow-none transition-all !important;
   }
 
   /* Mobile Navigation */
@@ -458,12 +458,12 @@
 
   /* Links */
   .auth-link {
-    @apply text-[#3B82F6] hover:text-[#2563eb] dark:text-[#FFB5C5] dark:hover:text-[#FFA5B8] transition-all !important;
+    @apply text-[#3B82F6] dark:text-[#FFB5C5] !important;
   }
   
   /* Text Colors */
   .text-auth {
-    @apply text-dark-100 !important;
+    @apply text-black dark:text-white !important;
   }
 }
 

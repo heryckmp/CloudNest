@@ -30,7 +30,7 @@ const FileUploader = ({ ownerId, accountId, className }: Props) => {
       const uploadPromises = acceptedFiles.map(async (file) => {
         if (file.size > MAX_FILE_SIZE) {
           setFiles((prevFiles) =>
-            prevFiles.filter((f) => f.name !== file.name),
+            prevFiles.filter((f) => f.name !== file.name)
           );
 
           return toast({
@@ -48,23 +48,23 @@ const FileUploader = ({ ownerId, accountId, className }: Props) => {
           (uploadedFile) => {
             if (uploadedFile) {
               setFiles((prevFiles) =>
-                prevFiles.filter((f) => f.name !== file.name),
+                prevFiles.filter((f) => f.name !== file.name)
               );
             }
-          },
+          }
         );
       });
 
       await Promise.all(uploadPromises);
     },
-    [ownerId, accountId, path],
+    [ownerId, accountId, path]
   );
 
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
   const handleRemoveFile = (
     e: React.MouseEvent<HTMLImageElement, MouseEvent>,
-    fileName: string,
+    fileName: string
   ) => {
     e.stopPropagation();
     setFiles((prevFiles) => prevFiles.filter((file) => file.name !== fileName));
@@ -79,12 +79,12 @@ const FileUploader = ({ ownerId, accountId, className }: Props) => {
           alt="upload"
           width={24}
           height={24}
-        />{" "}
+        />
         <p>Upload</p>
       </Button>
       {files.length > 0 && (
         <ul className="uploader-preview-list">
-          <h4 className="h4 text-light-100">Uploading</h4>
+          <h4 className="h4 text-black dark:text-white">Uploading</h4>
 
           {files.map((file, index) => {
             const { type, extension } = getFileType(file.name);
