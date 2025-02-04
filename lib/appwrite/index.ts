@@ -35,10 +35,32 @@ export const createSessionClient = async () => {
 
 export const createAdminClient = async () => {
   try {
+    console.log('Creating admin client with config:', {
+      endpoint: appwriteConfig.endpointUrl,
+      projectId: appwriteConfig.projectId,
+      hasKey: !!appwriteConfig.secretKey,
+      databaseId: appwriteConfig.databaseId,
+      bucketId: appwriteConfig.bucketId
+    });
+
+    if (!appwriteConfig.secretKey) {
+      throw new Error('API Key is not configured');
+    }
+
+    if (!appwriteConfig.projectId) {
+      throw new Error('Project ID is not configured');
+    }
+
+    if (!appwriteConfig.bucketId) {
+      throw new Error('Bucket ID is not configured');
+    }
+
     const client = new Client()
       .setEndpoint(appwriteConfig.endpointUrl)
       .setProject(appwriteConfig.projectId)
       .setKey(appwriteConfig.secretKey);
+
+    console.log('Admin client created successfully');
 
     return {
       get account() {
@@ -54,8 +76,20 @@ export const createAdminClient = async () => {
         return new Avatars(client);
       },
     };
-  } catch (error) {
-    console.error("Error creating admin client:", error);
+  } catch (error: any) {
+    console.error("Error creating admin client:", {
+      error,
+      message: error?.message,
+      code: error?.code,
+      type: error?.type,
+      config: {
+        hasEndpoint: !!appwriteConfig.endpointUrl,
+        hasProjectId: !!appwriteConfig.projectId,
+        hasKey: !!appwriteConfig.secretKey,
+        hasBucketId: !!appwriteConfig.bucketId,
+        hasDatabase: !!appwriteConfig.databaseId
+      }
+    });
     throw error;
   }
 };

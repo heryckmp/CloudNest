@@ -157,33 +157,33 @@ export const getUsageSummary = (totalSpace: any) => {
   return [
     {
       title: "Documents",
-      size: totalSpace.document.size,
+      size: convertFileSize(totalSpace.document.size),
       latestDate: totalSpace.document.latestDate,
-      icon: "/assets/icons/file-document-light.svg",
+      icon: "/assets/icons/folder-document.svg",
       url: "/documents",
     },
     {
       title: "Images",
-      size: totalSpace.image.size,
+      size: convertFileSize(totalSpace.image.size),
       latestDate: totalSpace.image.latestDate,
-      icon: "/assets/icons/file-image-light.svg",
+      icon: "/assets/icons/folder-image.svg",
       url: "/images",
     },
     {
       title: "Media",
-      size: totalSpace.video.size + totalSpace.audio.size,
+      size: convertFileSize(totalSpace.video.size + totalSpace.audio.size),
       latestDate:
         totalSpace.video.latestDate > totalSpace.audio.latestDate
           ? totalSpace.video.latestDate
           : totalSpace.audio.latestDate,
-      icon: "/assets/icons/file-video-light.svg",
+      icon: "/assets/icons/folder-media.svg",
       url: "/media",
     },
     {
       title: "Others",
-      size: totalSpace.other.size,
+      size: convertFileSize(totalSpace.other.size),
       latestDate: totalSpace.other.latestDate,
-      icon: "/assets/icons/file-other-light.svg",
+      icon: "/assets/icons/folder-other.svg",
       url: "/others",
     },
   ];

@@ -22,18 +22,26 @@ const FileUploader = ({ ownerId, accountId, className }: Props) => {
   const path = usePathname();
   const { toast } = useToast();
   const [files, setFiles] = useState<File[]>([]);
+  const [uploadingFiles, setUploadingFiles] = useState<Set<string>>(new Set());
 
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {
-      setFiles(acceptedFiles);
+      console.log('Files dropped:', acceptedFiles.map(f => ({ 
+        name: f.name, 
+        size: f.size, 
+        type: f.type,
+        lastModified: f.lastModified
+      })));
 
-      const uploadPromises = acceptedFiles.map(async (file) => {
+      for (const file of acceptedFiles) {
         if (file.size > MAX_FILE_SIZE) {
-          setFiles((prevFiles) =>
-            prevFiles.filter((f) => f.name !== file.name)
-          );
+          console.log('File too large:', { 
+            name: file.name, 
+            size: file.size, 
+            maxSize: MAX_FILE_SIZE 
+          });
 
-          return toast({
+          toast({
             description: (
               <p className="body-2 text-white">
                 <span className="font-semibold">{file.name}</span> is too large.
@@ -42,32 +50,101 @@ const FileUploader = ({ ownerId, accountId, className }: Props) => {
             ),
             className: "error-toast",
           });
+          continue;
         }
 
-        return uploadFile({ file, ownerId, accountId, path }).then(
-          (uploadedFile) => {
-            if (uploadedFile) {
-              setFiles((prevFiles) =>
-                prevFiles.filter((f) => f.name !== file.name)
-              );
-            }
-          }
-        );
-      });
+        setFiles((prev) => [...prev, file]);
+        setUploadingFiles((prev) => new Set(prev).add(file.name));
 
-      await Promise.all(uploadPromises);
+        console.log('Starting upload for file:', { 
+          name: file.name, 
+          size: file.size,
+          type: file.type,
+          lastModified: file.lastModified
+        });
+
+        try {
+          console.log('Calling uploadFile function with:', {
+            fileName: file.name,
+            fileType: file.type,
+            ownerId,
+            accountId,
+            path
+          });
+          
+          const success = await uploadFile({ 
+            file, 
+            ownerId, 
+            accountId, 
+            path: path || '/'
+          });
+          
+          console.log('Upload result:', { 
+            fileName: file.name, 
+            success,
+            fileInfo: {
+              size: file.size,
+              type: file.type,
+              lastModified: file.lastModified
+            }
+          });
+          
+          if (!success) {
+            throw new Error("Failed to upload file");
+          }
+
+          toast({
+            description: (
+              <p className="body-2 text-white">
+                <span className="font-semibold">{file.name}</span> uploaded successfully!
+              </p>
+            ),
+          });
+        } catch (error) {
+          console.error(`Error uploading ${file.name}:`, {
+            error,
+            fileInfo: {
+              size: file.size,
+              type: file.type,
+              lastModified: file.lastModified
+            }
+          });
+          
+          toast({
+            description: (
+              <p className="body-2 text-white">
+                Failed to upload <span className="font-semibold">{file.name}</span>. Please try again.
+              </p>
+            ),
+            className: "error-toast",
+          });
+        } finally {
+          console.log('Cleaning up file states:', file.name);
+          setFiles((prevFiles) => prevFiles.filter((f) => f.name !== file.name));
+          setUploadingFiles((prev) => {
+            const newSet = new Set(prev);
+            newSet.delete(file.name);
+            return newSet;
+          });
+        }
+      }
     },
-    [ownerId, accountId, path]
+    [ownerId, accountId, path, toast]
   );
 
-  const { getRootProps, getInputProps } = useDropzone({ onDrop });
+  const { getRootProps, getInputProps } = useDropzone({ 
+    onDrop,
+    maxSize: MAX_FILE_SIZE
+  });
 
   const handleRemoveFile = (
     e: React.MouseEvent<HTMLImageElement, MouseEvent>,
     fileName: string
   ) => {
     e.stopPropagation();
-    setFiles((prevFiles) => prevFiles.filter((file) => file.name !== fileName));
+    if (!uploadingFiles.has(fileName)) {
+      setFiles((prevFiles) => prevFiles.filter((file) => file.name !== fileName));
+    }
   };
 
   return (
@@ -79,6 +156,7 @@ const FileUploader = ({ ownerId, accountId, className }: Props) => {
           alt="upload"
           width={24}
           height={24}
+          className="w-6 h-6"
         />
         <p>Upload</p>
       </Button>
@@ -88,6 +166,7 @@ const FileUploader = ({ ownerId, accountId, className }: Props) => {
 
           {files.map((file, index) => {
             const { type, extension } = getFileType(file.name);
+            const isUploading = uploadingFiles.has(file.name);
 
             return (
               <li
@@ -103,22 +182,28 @@ const FileUploader = ({ ownerId, accountId, className }: Props) => {
 
                   <div className="preview-item-name">
                     {file.name}
-                    <Image
-                      src="/assets/icons/file-loader.gif"
-                      width={80}
-                      height={26}
-                      alt="Loader"
-                    />
+                    {isUploading && (
+                      <Image
+                        src="/assets/icons/file-loader.gif"
+                        width={80}
+                        height={26}
+                        alt="Loader"
+                        className="w-20 h-auto"
+                      />
+                    )}
                   </div>
                 </div>
 
-                <Image
-                  src="/assets/icons/remove.svg"
-                  width={24}
-                  height={24}
-                  alt="Remove"
-                  onClick={(e) => handleRemoveFile(e, file.name)}
-                />
+                {!isUploading && (
+                  <Image
+                    src="/assets/icons/remove.svg"
+                    width={24}
+                    height={24}
+                    alt="Remove"
+                    className="w-6 h-6"
+                    onClick={(e) => handleRemoveFile(e, file.name)}
+                  />
+                )}
               </li>
             );
           })}

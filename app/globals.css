@@ -207,61 +207,99 @@
 
   /* Dashboard */
   .dashboard-container {
-    @apply mx-auto grid max-w-7xl grid-cols-1 gap-6 md:grid-cols-2 xl:gap-10 !important;
-  }
-  .dashboard-summary-list {
-    @apply mt-6 grid grid-cols-1 gap-6 xl:mt-10 xl:grid-cols-2 xl:gap-9 !important;
-  }
-  .dashboard-summary-card {
-    @apply relative flex flex-col items-center justify-center w-full aspect-square rounded-2xl bg-gradient-to-br from-sky-100 to-white dark:from-[#2a4270] dark:to-[#1f3256] transition-all hover:scale-105 cursor-pointer overflow-hidden !important;
-  }
-  .dashboard-summary-card-group {
-    @apply group;
-  }
-  .summary-type-icon {
-    @apply hidden !important;
-  }
-  .summary-type-size {
-    @apply h4 text-black dark:text-white mb-1 transition-all duration-300 !important;
-  }
-  .summary-type-title {
-    @apply h5 text-black dark:text-white text-center transition-all duration-300 !important;
-  }
-  .summary-type-size-hover {
-    @apply transform scale-110;
-  }
-  .summary-type-title-hover {
-    @apply transform translate-y-1;
-  }
-  .dashboard-recent-files {
-    @apply h-full rounded-[20px] bg-sky-200 dark:bg-[#1f3256] p-5 xl:p-8 !important;
-  }
-  .recent-file-details {
-    @apply flex w-full flex-col xl:flex-row xl:justify-between !important;
-  }
-  .recent-file-name {
-    @apply subtitle-2 line-clamp-1 w-full text-black dark:text-white sm:max-w-[200px] lg:max-w-[250px] !important;
-  }
-  .recent-file-date {
-    @apply body-2 text-gray-600 dark:text-gray-300 !important;
-  }
-  .empty-list {
-    @apply body-1 mt-10 text-center text-black dark:text-white !important;
+    @apply mx-auto grid max-w-7xl grid-cols-1 gap-6 p-6 !important;
   }
 
-  /* Type page */
-  .page-container {
-    @apply mx-auto flex w-full max-w-7xl flex-col items-center gap-8 !important;
+  /* Storage Chart Section */
+  .storage-section {
+    @apply bg-[#FF7F7F] rounded-2xl p-6 relative overflow-hidden !important;
   }
-  .total-size-section {
-    @apply flex mt-2 flex-col justify-between sm:flex-row sm:items-center !important;
+
+  .storage-info {
+    @apply flex items-start justify-between text-white !important;
   }
-  .file-list {
-    @apply grid w-full gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 !important;
+
+  .storage-percentage {
+    @apply text-4xl font-bold mb-1 !important;
   }
-  .sort-container {
-    @apply mt-5 flex items-center sm:mt-0 sm:gap-3 !important;
+
+  .storage-text {
+    @apply text-sm opacity-90 !important;
   }
+
+  .storage-section::before {
+    content: '';
+    @apply absolute bottom-0 left-0 w-full h-[120px] bg-white/10 rounded-[100%] -mb-16 !important;
+  }
+
+  /* Files Grid */
+  .files-grid {
+    @apply grid grid-cols-2 gap-4 mt-6 !important;
+  }
+
+  .file-type-card {
+    @apply bg-white dark:bg-[#1f3256] rounded-2xl p-4 flex items-center gap-3 !important;
+  }
+
+  .file-type-icon {
+    @apply w-8 h-8 rounded-full flex items-center justify-center !important;
+  }
+
+  .file-type-icon img {
+    @apply w-4 h-4 !important;
+  }
+
+  .file-type-info {
+    @apply flex flex-col !important;
+  }
+
+  .file-type-size {
+    @apply text-base font-semibold text-black dark:text-white !important;
+  }
+
+  .file-type-update {
+    @apply text-[11px] text-gray-500 dark:text-gray-400 !important;
+  }
+
+  /* Recent Files */
+  .recent-files-section {
+    @apply bg-white dark:bg-[#1f3256] rounded-2xl p-6 !important;
+  }
+
+  .recent-file-item {
+    @apply flex items-center gap-3 py-2 hover:bg-gray-50 dark:hover:bg-[#2a4270] rounded-lg px-2 transition-colors !important;
+  }
+
+  .file-icon {
+    @apply w-8 h-8 rounded-lg flex items-center justify-center !important;
+  }
+
+  .file-icon img {
+    @apply w-4 h-4 !important;
+  }
+
+  .file-details {
+    @apply flex-1 !important;
+  }
+
+  .file-name {
+    @apply text-sm font-medium text-black dark:text-white !important;
+  }
+
+  .file-date {
+    @apply text-[11px] text-gray-500 dark:text-gray-400 !important;
+  }
+
+  /* Icon Colors */
+  .document-bg { @apply bg-red-100 text-red-500 !important; }
+  .image-bg { @apply bg-blue-100 text-blue-500 !important; }
+  .video-bg, .audio-bg { @apply bg-green-100 text-green-500 !important; }
+  .other-bg { @apply bg-purple-100 text-purple-500 !important; }
+
+  .documents-bg { @apply bg-red-100 text-red-500 !important; }
+  .images-bg { @apply bg-blue-100 text-blue-500 !important; }
+  .media-bg { @apply bg-green-100 text-green-500 !important; }
+  .others-bg { @apply bg-purple-100 text-purple-500 !important; }
 
   /* ActionsDropdown */
   .rename-input-field {
@@ -460,10 +498,10 @@
 
   /* Thumbnail */
   .thumbnail {
-    @apply flex-center size-[50px] min-w-[50px] overflow-hidden rounded-full bg-brand/10;
+    @apply relative flex items-center justify-center rounded-full bg-sky-100 dark:bg-[#2a4270] aspect-square overflow-hidden !important;
   }
   .thumbnail-image {
-    @apply size-full object-cover object-center !important;
+    @apply object-cover w-full h-full !important;
   }
 
   /* Form Elements */

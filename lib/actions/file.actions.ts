@@ -2,57 +2,154 @@
 
 import { createAdminClient } from "@/lib/appwrite";
 import { appwriteConfig } from "@/lib/appwrite/config";
-import { Query } from "node-appwrite";
+import { Query, ID } from "node-appwrite";
 import { getFileType, parseStringify } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
 import { getCurrentUser } from "@/lib/actions/user.actions";
 
-const handleError = (error: unknown, message: string) => {
-  console.log(error, message);
-  throw error;
+// Define os tipos permitidos para o campo type
+type FileType = "image" | "document" | "video" | "audio" | "other";
+
+const getEnumFileType = (type: string): FileType => {
+  const typeMap: Record<string, FileType> = {
+    'image/jpeg': 'image',
+    'image/png': 'image',
+    'image/gif': 'image',
+    'image/webp': 'image',
+    'application/pdf': 'document',
+    'application/msword': 'document',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'document',
+    'video/mp4': 'video',
+    'video/webm': 'video',
+    'audio/mpeg': 'audio',
+    'audio/wav': 'audio',
+    'audio/ogg': 'audio'
+  };
+
+  return typeMap[type] || 'other';
 };
 
 export const uploadFile = async ({
   file,
-  ownerId,
   accountId,
   path,
 }: UploadFileProps) => {
   try {
+    console.log('Starting file upload process with:', {
+      bucketId: appwriteConfig.bucketId,
+      fileName: file.name,
+      fileSize: file.size,
+      fileType: file.type
+    });
+
     const { storage, databases } = await createAdminClient();
 
     // Upload file to storage
-    const uploadedFile = await storage.createFile(
-      appwriteConfig.bucketId,
-      file.name,
-      file
-    );
+    try {
+      const uploadedFile = await storage.createFile(
+        appwriteConfig.bucketId,
+        ID.unique(),
+        file
+      );
 
-    if (!uploadedFile) throw new Error("Failed to upload file");
-
-    const { type, extension } = getFileType(file.name);
-
-    // Create file document
-    await databases.createDocument(
-      appwriteConfig.databaseId,
-      appwriteConfig.filesCollectionId,
-      uploadedFile.$id,
-      {
-        name: file.name,
-        size: file.size,
-        type,
-        extension,
-        bucketFileId: uploadedFile.$id,
-        ownerId,
-        accountId,
-        users: [accountId],
+      if (!uploadedFile) {
+        console.error("Failed to upload file to storage - no response from Appwrite");
+        return false;
       }
-    );
 
-    revalidatePath(path);
-    return true;
-  } catch (error) {
-    console.error("Error uploading file:", error);
+      console.log("File uploaded successfully to storage:", {
+        fileId: uploadedFile.$id,
+        name: file.name,
+        size: file.size
+      });
+
+      const { type: mimeType, extension } = getFileType(file.name);
+      const enumType = getEnumFileType(file.type);
+
+      // Create file document
+      try {
+        console.log("Attempting to create file document with:", {
+          databaseId: appwriteConfig.databaseId,
+          collectionId: appwriteConfig.filesCollectionId,
+          data: {
+            name: file.name,
+            size: file.size,
+            type: enumType,
+            extension,
+            bucketFileId: uploadedFile.$id,
+            accountId,
+            ownerId: accountId,
+            users: [accountId]
+          }
+        });
+
+        const fileDoc = await databases.createDocument(
+          appwriteConfig.databaseId,
+          appwriteConfig.filesCollectionId,
+          ID.unique(),
+          {
+            name: file.name,
+            size: file.size,
+            type: enumType,
+            extension,
+            bucketFileId: uploadedFile.$id,
+            accountId,
+            ownerId: accountId,
+            users: [accountId]
+          }
+        );
+
+        if (!fileDoc) {
+          console.error("Failed to create file document - document is null");
+          await storage.deleteFile(appwriteConfig.bucketId, uploadedFile.$id);
+          return false;
+        }
+
+        console.log("File document created successfully:", {
+          docId: fileDoc.$id,
+          name: fileDoc.name
+        });
+
+        // Revalidate the path to update the UI
+        console.log("Revalidating path:", path);
+        revalidatePath(path);
+        
+        return true;
+      } catch (dbError: any) {
+        console.error("Error creating file document:", {
+          error: dbError,
+          code: dbError?.code,
+          message: dbError?.message,
+          type: dbError?.type,
+          response: dbError?.response
+        });
+        
+        // Cleanup: delete the uploaded file since document creation failed
+        console.log("Cleaning up uploaded file due to document creation failure");
+        await storage.deleteFile(appwriteConfig.bucketId, uploadedFile.$id);
+        
+        return false;
+      }
+    } catch (storageError: any) {
+      console.error("Error uploading file to storage:", {
+        error: storageError,
+        code: storageError?.code,
+        message: storageError?.message,
+        type: storageError?.type,
+        response: storageError?.response
+      });
+      return false;
+    }
+  } catch (error: any) {
+    console.error("Error in upload process:", {
+      error,
+      code: error?.code,
+      message: error?.message,
+      type: error?.type,
+      response: error?.response,
+      fileName: file.name,
+      fileSize: file.size
+    });
     return false;
   }
 };

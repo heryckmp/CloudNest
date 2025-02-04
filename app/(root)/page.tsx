@@ -1,94 +1,94 @@
 import { getFiles, getTotalSpaceUsed } from "@/lib/actions/file.actions";
-import { getUsageSummary } from "@/lib/utils";
+import { getUsageSummary, constructFileUrl, calculatePercentage } from "@/lib/utils";
 import Link from "next/link";
 import { Models } from "node-appwrite";
-import Thumbnail from "@/components/Thumbnail";
 import FormattedDateTime from "@/components/FormattedDateTime";
 import ActionDropdown from "@/components/ActionDropdown";
-import { Chart } from "@/components/Chart";
-import { DashboardCardSkeleton } from "@/components/DashboardCardSkeleton";
-import { CardSkeleton } from "@/components/CardSkeleton";
-import { Button } from "@/components/ui/button";
+import Thumbnail from "@/components/Thumbnail";
 
 const Dashboard = async () => {
   const files = await getFiles({ types: [], searchText: "", sort: "$createdAt-desc" });
-
-  // Parallel requests
-  const [totalSpace] = await Promise.all([
-    getTotalSpaceUsed(),
-  ]);
-
+  const [totalSpace] = await Promise.all([getTotalSpaceUsed()]);
   const summary = getUsageSummary(totalSpace);
+  const usedPercentage = calculatePercentage(totalSpace.used);
 
   return (
     <main className="dashboard-container">
-      <div className="flex justify-between items-center w-full">
-        <h1 className="h2 text-black dark:text-white">Dashboard</h1>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Storage Chart */}
+        <section className="storage-section lg:col-span-1">
+          <div className="storage-info">
+            <div>
+              <p className="storage-percentage">{usedPercentage}%</p>
+              <p className="storage-text">Space used</p>
+            </div>
+            <div className="text-right">
+              <p className="storage-text">Available Storage</p>
+              <p className="storage-text">{totalSpace.used} / {totalSpace.all}</p>
+            </div>
+          </div>
+        </section>
+
+        {/* Files Grid */}
+        <div className="files-grid lg:col-span-2">
+          {summary.map((item) => (
+            <div key={item.title} className="file-type-card">
+              <div className={`file-type-icon ${item.title.toLowerCase()}-bg`}>
+                <Thumbnail
+                  type={item.title.toLowerCase()}
+                  extension=""
+                  url={item.icon}
+                  className="w-8 h-8"
+                  imageClassName="w-full h-full"
+                />
+              </div>
+              <div className="file-type-info">
+                <p className="file-type-size">{item.size}</p>
+                <p className="file-type-update">Last update: {item.latestDate}</p>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
-      <section>
-        <Chart used={totalSpace.used} />
 
-        <ul className="dashboard-summary-list">
-          {summary.length === 0 ? (
-            <>
-              <DashboardCardSkeleton />
-              <DashboardCardSkeleton />
-              <DashboardCardSkeleton />
-              <DashboardCardSkeleton />
-            </>
-          ) : (
-            summary.map((item) => (
-              <li key={item.title} className="group dashboard-summary-card">
-                <div className={`card-icon ${item.title.toLowerCase()}-icon`}>
-                  {item.title === "Others" && <div />}
-                </div>
-                <p className="summary-type-size group-hover:scale-110">{item.size}</p>
-                <p className="summary-type-title group-hover:translate-y-1">{item.title}</p>
-              </li>
-            ))
-          )}
-        </ul>
-      </section>
-
-      {/* Recent files uploaded */}
-      <section className="dashboard-recent-files">
-        <h2 className="h3 xl:h2 text-black dark:text-white">Recent files uploaded</h2>
+      {/* Recent Files */}
+      <section className="recent-files-section mt-6">
+        <h2 className="text-xl font-bold mb-4 text-black dark:text-white">Recent files uploaded</h2>
         {!files?.documents ? (
-          <div className="mt-5 flex flex-col gap-5">
-            <CardSkeleton />
-            <CardSkeleton />
-            <CardSkeleton />
+          <div className="space-y-4">
+            <div className="h-16 bg-gray-100 dark:bg-gray-800 rounded-lg animate-pulse" />
+            <div className="h-16 bg-gray-100 dark:bg-gray-800 rounded-lg animate-pulse" />
+            <div className="h-16 bg-gray-100 dark:bg-gray-800 rounded-lg animate-pulse" />
           </div>
         ) : files.documents.length > 0 ? (
-          <ul className="mt-5 flex flex-col gap-5">
+          <div className="space-y-1">
             {files.documents.map((file: Models.Document) => (
               <Link
-                href={file.url}
+                href={constructFileUrl(file.bucketFileId)}
                 target="_blank"
-                className="flex items-center gap-3"
+                className="recent-file-item"
                 key={file.$id}
               >
                 <Thumbnail
                   type={file.type}
                   extension={file.extension}
-                  url={file.url}
+                  url={constructFileUrl(file.bucketFileId)}
+                  className="w-8 h-8"
+                  imageClassName="w-full h-full"
                 />
-
-                <div className="recent-file-details">
-                  <div className="flex flex-col gap-1">
-                    <p className="recent-file-name">{file.name}</p>
-                    <FormattedDateTime
-                      date={file.$createdAt}
-                      className="caption"
-                    />
-                  </div>
-                  <ActionDropdown file={file} />
+                <div className="file-details">
+                  <p className="file-name">{file.name}</p>
+                  <FormattedDateTime
+                    date={file.$createdAt}
+                    className="file-date"
+                  />
                 </div>
+                <ActionDropdown file={file} />
               </Link>
             ))}
-          </ul>
+          </div>
         ) : (
-          <p className="empty-list">No files uploaded</p>
+          <p className="text-center text-gray-500">No files uploaded</p>
         )}
       </section>
     </main>

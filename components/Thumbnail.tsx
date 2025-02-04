@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { cn, getFileIcon } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 
 interface Props {
   type: string;
@@ -10,7 +10,7 @@ interface Props {
   className?: string;
 }
 
-export const Thumbnail = ({
+const Thumbnail = ({
   type,
   extension,
   url = "",
@@ -18,21 +18,36 @@ export const Thumbnail = ({
   className,
 }: Props) => {
   const isImage = type === "image" && extension !== "svg";
-  const imageSrc = isImage && url ? url : getFileIcon(extension, type);
+  const imageSrc = isImage && url ? url : `/assets/icons/file-${type}.svg`;
 
   return (
     <figure className={cn("thumbnail", className)}>
-      <Image
-        src={imageSrc || "/assets/icons/file-other.svg"}
-        alt="thumbnail"
-        width={100}
-        height={100}
-        className={cn(
-          "size-8 object-contain",
-          imageClassName,
-          isImage && "thumbnail-image",
-        )}
-      />
+      {isImage ? (
+        <Image
+          src={imageSrc}
+          alt="thumbnail"
+          width={100}
+          height={100}
+          className={cn(
+            "size-8 object-cover rounded-full",
+            imageClassName,
+            "thumbnail-image"
+          )}
+          unoptimized={true}
+          priority={true}
+        />
+      ) : (
+        <Image
+          src={imageSrc}
+          alt="file icon"
+          width={100}
+          height={100}
+          className={cn(
+            "size-8 object-contain",
+            imageClassName
+          )}
+        />
+      )}
     </figure>
   );
 };
