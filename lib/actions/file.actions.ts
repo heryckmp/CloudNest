@@ -1,10 +1,9 @@
 "use server";
 
-import { createAdminClient, createSessionClient } from "@/lib/appwrite";
-import { InputFile } from "node-appwrite/file";
+import { createAdminClient } from "@/lib/appwrite";
 import { appwriteConfig } from "@/lib/appwrite/config";
-import { ID, Models, Query } from "node-appwrite";
-import { constructFileUrl, getFileType, parseStringify } from "@/lib/utils";
+import { Query } from "node-appwrite";
+import { getFileType, parseStringify } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
 import { getCurrentUser } from "@/lib/actions/user.actions";
 
@@ -58,35 +57,6 @@ export const uploadFile = async ({
   }
 };
 
-const createQueries = (
-  currentUser: Models.Document,
-  types: string[],
-  searchText: string,
-  sort: string,
-  limit?: number,
-) => {
-  const queries = [
-    Query.or([
-      Query.equal("owner", [currentUser.$id]),
-      Query.contains("users", [currentUser.email]),
-    ]),
-  ];
-
-  if (types.length > 0) queries.push(Query.equal("type", types));
-  if (searchText) queries.push(Query.contains("name", searchText));
-  if (limit) queries.push(Query.limit(limit));
-
-  if (sort) {
-    const [sortBy, orderBy] = sort.split("-");
-
-    queries.push(
-      orderBy === "asc" ? Query.orderAsc(sortBy) : Query.orderDesc(sortBy),
-    );
-  }
-
-  return queries;
-};
-
 export const getFiles = async ({
   types,
   searchText = "",
@@ -97,17 +67,23 @@ export const getFiles = async ({
     const { databases } = await createAdminClient();
 
     const [sortField, sortOrder] = sort.split("-");
+    const queries: string[] = [];
 
-    const queries: string[] = [
-      Query.equal("type", types),
-      ...(searchText ? [Query.search("name", searchText)] : []),
-      Query.orderDesc(sortField),
-      Query.limit(limit),
-    ];
-
-    if (sortOrder === "asc") {
-      queries[queries.length - 2] = Query.orderAsc(sortField);
+    // Adiciona a consulta de tipos apenas se houver tipos especificados
+    if (types && types.length > 0) {
+      queries.push(Query.equal("type", types));
     }
+
+    // Adiciona a busca por texto se houver
+    if (searchText) {
+      queries.push(Query.search("name", searchText));
+    }
+
+    // Adiciona a ordenação
+    queries.push(sortOrder === "asc" ? Query.orderAsc(sortField) : Query.orderDesc(sortField));
+    
+    // Adiciona o limite
+    queries.push(Query.limit(limit));
 
     const files = await databases.listDocuments(
       appwriteConfig.databaseId,
@@ -201,14 +177,19 @@ export const deleteFile = async ({
 // ============================== TOTAL FILE SPACE USED
 export async function getTotalSpaceUsed() {
   try {
-    const { databases } = await createSessionClient();
     const currentUser = await getCurrentUser();
-    if (!currentUser) throw new Error("User is not authenticated.");
+    if (!currentUser) {
+      console.log("User not authenticated");
+      return null;
+    }
+
+    // Usar o cliente admin para evitar problemas de autorização
+    const { databases } = await createAdminClient();
 
     const files = await databases.listDocuments(
       appwriteConfig.databaseId,
       appwriteConfig.filesCollectionId,
-      [Query.equal("owner", [currentUser.$id])],
+      [Query.equal("accountId", currentUser.accountId)]
     );
 
     const totalSpace = {
@@ -236,6 +217,7 @@ export async function getTotalSpaceUsed() {
 
     return parseStringify(totalSpace);
   } catch (error) {
-    handleError(error, "Error calculating total space used:, ");
+    console.error("Error calculating total space used:", error);
+    return null;
   }
 }

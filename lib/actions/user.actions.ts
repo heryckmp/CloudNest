@@ -29,8 +29,8 @@ export const sendEmailOTP = async ({ email }: { email: string }) => {
   const { account } = await createAdminClient();
 
   try {
-    // Criar um token de login por email
-    const token = await account.createMagicURLToken(ID.unique(), email);
+    // Criar um token OTP por email
+    const token = await account.createEmailToken(ID.unique(), email);
 
     return token.userId;
   } catch (error) {
@@ -99,9 +99,9 @@ export const verifySecret = async ({
     const { account } = await createAdminClient();
 
     // Verificar o token OTP e criar a sessão
-    const session = await account.updateMagicURLSession(accountId, password);
+    const session = await account.createSession(accountId, password);
 
-    if (!session || !session.secret) {
+    if (!session) {
       throw new Error("Failed to create session");
     }
 
@@ -156,24 +156,35 @@ export const verifySecret = async ({
 
 export const getCurrentUser = async () => {
   try {
-    const { databases, account } = await createSessionClient();
-
-    const result = await account.get();
-    if (!result || !result.$id) {
+    // Primeiro tenta obter o cliente com a sessão atual
+    const { account } = await createSessionClient();
+    
+    // Tenta obter informações da conta atual
+    const currentAccount = await account.get();
+    
+    if (!currentAccount || !currentAccount.$id) {
+      console.log("No account found");
       return null;
     }
 
-    const user = await databases.listDocuments(
+    // Se tiver conta, busca o documento do usuário
+    const { databases } = await createAdminClient();
+    
+    const users = await databases.listDocuments(
       appwriteConfig.databaseId,
       appwriteConfig.usersCollectionId,
-      [Query.equal("accountId", result.$id)],
+      [Query.equal("accountId", currentAccount.$id)]
     );
 
-    if (user.total <= 0) return null;
+    if (!users || users.total === 0) {
+      console.log("No user document found");
+      return null;
+    }
 
-    return parseStringify(user.documents[0]);
+    const user = users.documents[0];
+    return parseStringify(user);
   } catch (error) {
-    console.error("Erro ao obter usuário atual:", error);
+    console.error("Error in getCurrentUser:", error);
     return null;
   }
 };
