@@ -86,7 +86,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
                     <FormControl>
                       <Input
                         placeholder="Enter your full name"
-                        className="shad-input"
+                        className="shad-input bg-transparent h-14 text-2xl tracking-wide font-semibold text-black dark:text-white focus:ring-2 focus:ring-brand dark:focus:ring-brand-dark placeholder:text-gray-400/70 dark:placeholder:text-gray-500/70 !important"
                         {...field}
                       />
                     </FormControl>
@@ -109,7 +109,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
                   <FormControl>
                     <Input
                       placeholder="Enter your email"
-                      className="shad-input"
+                      className="shad-input bg-transparent h-14 text-2xl tracking-wide font-semibold text-black dark:text-white focus:ring-2 focus:ring-brand dark:focus:ring-brand-dark placeholder:text-gray-400/70 dark:placeholder:text-gray-500/70 !important"
                       {...field}
                     />
                   </FormControl>
@@ -154,6 +154,27 @@ const AuthForm = ({ type }: { type: FormType }) => {
               {type === "sign-in" ? "Sign Up" : "Sign In"}
             </Link>
           </div>
+
+          <a 
+            href="https://github.com/heryckmp" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-2 px-4 py-3 mt-4 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all group"
+          >
+            <Image
+              src="/assets/icons/github.svg"
+              alt="GitHub"
+              width={24}
+              height={24}
+              className="text-gray-700 dark:text-gray-300 group-hover:text-brand dark:group-hover:text-brand transition-colors"
+            />
+            <div className="flex flex-col items-start">
+              <span className="text-xs text-gray-500 dark:text-gray-400">Created by</span>
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300 group-hover:text-brand dark:group-hover:text-brand">
+                Erick Moreira
+              </span>
+            </div>
+          </a>
         </form>
       </Form>
 

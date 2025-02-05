@@ -145,11 +145,11 @@
     @apply outline-none ring-offset-transparent focus:ring-transparent focus:ring-offset-0 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 !important;
   }
   .shad-input {
-    @apply border-none shadow-none p-0 shad-no-focus placeholder:text-light-200 body-2 !important;
+    @apply border-none shadow-none p-0 shad-no-focus text-black dark:text-white placeholder:text-gray-400/70 dark:placeholder:text-gray-500/70 !important;
   }
 
   .shad-form-item {
-    @apply flex h-[78px] flex-col justify-center rounded-xl border border-light-300 px-4 shadow-drop-1 bg-sky-100 dark:bg-[#2a4270] !important;
+    @apply flex h-[78px] flex-col justify-center rounded-xl border border-light-300 px-4 shadow-drop-1 bg-white dark:bg-[#2a4270] !important;
   }
   .shad-form-label {
     @apply text-black dark:text-white pt-2 body-2 w-full !important;
@@ -506,7 +506,7 @@
 
   /* Form Elements */
   .shad-input {
-    @apply border-none shadow-none p-0 shad-no-focus placeholder:text-light-400 text-dark-100 body-2 !important;
+    @apply border-none shadow-none p-0 shad-no-focus text-black dark:text-white placeholder:text-gray-400/70 dark:placeholder:text-gray-500/70 !important;
   }
 
   /* Links */

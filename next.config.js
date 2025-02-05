@@ -1,17 +1,19 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: [
-      'cloud.appwrite.io',
-      'img.freepik.com'
-    ],
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: '*.appwrite.io',
+        hostname: 'cloud.appwrite.io',
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'img.freepik.com',
+        port: '',
+        pathname: '/**',
+      }
     ],
   },
 }
