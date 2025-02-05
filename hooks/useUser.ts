@@ -9,6 +9,12 @@ interface User {
   email: string;
   imageUrl?: string;
   accountId: string;
+  $id?: string;
+  $collectionId?: string;
+  $databaseId?: string;
+  $createdAt?: string;
+  $updatedAt?: string;
+  $permissions?: string[];
 }
 
 interface UseUserProps {
@@ -24,11 +30,16 @@ export function useUser({ userId, accountId }: UseUserProps) {
     async function loadUser() {
       try {
         const userData = await getCurrentUser();
-        setUser({
-          ...userData,
-          id: userId,
-          accountId: accountId
-        });
+        if (userData) {
+          setUser({
+            id: userId,
+            name: userData.name || "",
+            email: userData.email || "",
+            imageUrl: userData.imageUrl,
+            accountId: accountId,
+            ...userData
+          });
+        }
       } catch (error) {
         console.error("Error loading user:", error);
       } finally {

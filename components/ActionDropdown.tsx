@@ -39,7 +39,7 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [emails, setEmails] = useState<string[]>([]);
 
-  const path = usePathname();
+  const path = usePathname() || "/";
 
   const closeAllModals = () => {
     setIsModalOpen(false);

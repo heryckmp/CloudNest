@@ -59,7 +59,9 @@ const AuthForm = ({ type }: { type: FormType }) => {
             })
           : await signInUser({ email: values.email });
 
-      setAccountId(user.accountId);
+      if (user) {
+        setAccountId(user.accountId);
+      }
     } catch {
       setErrorMessage("Failed to create account. Please try again.");
     } finally {
@@ -86,7 +88,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
                     <FormControl>
                       <Input
                         placeholder="Enter your full name"
-                        className="shad-input bg-transparent h-14 text-2xl tracking-wide font-semibold text-black dark:text-white focus:ring-2 focus:ring-brand dark:focus:ring-brand-dark placeholder:text-gray-400/70 dark:placeholder:text-gray-500/70 !important"
+                        className="shad-input bg-transparent h-12 text-lg tracking-wide font-medium text-black dark:text-white focus:ring-2 focus:ring-brand dark:focus:ring-brand-dark placeholder:text-gray-400/70 dark:placeholder:text-gray-500/70 !important"
                         {...field}
                       />
                     </FormControl>
@@ -109,7 +111,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
                   <FormControl>
                     <Input
                       placeholder="Enter your email"
-                      className="shad-input bg-transparent h-14 text-2xl tracking-wide font-semibold text-black dark:text-white focus:ring-2 focus:ring-brand dark:focus:ring-brand-dark placeholder:text-gray-400/70 dark:placeholder:text-gray-500/70 !important"
+                      className="shad-input bg-transparent h-12 text-lg tracking-wide font-medium text-black dark:text-white focus:ring-2 focus:ring-brand dark:focus:ring-brand-dark placeholder:text-gray-400/70 dark:placeholder:text-gray-500/70 !important"
                       {...field}
                     />
                   </FormControl>
