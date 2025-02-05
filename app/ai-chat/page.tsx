@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import ChatComponent from '@/components/SimpleChatComponent';
+import ChatComponent from '@/components/ChatComponent';
 
 export const metadata: Metadata = {
   title: "Assistente IA - CloudNest",
