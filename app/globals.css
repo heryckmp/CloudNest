@@ -369,7 +369,7 @@
     @apply flex items-center rounded-[20px] bg-brand p-5 text-white md:flex-col xl:flex-row !important;
   }
   .chart-container {
-    @apply mx-auto aspect-square w-[180px] text-white xl:w-[250px] !important;
+    @apply relative h-[300px] w-full;
   }
   .polar-grid {
     @apply first:fill-white/20 last:fill-brand !important;
@@ -618,6 +618,34 @@
       transform: scale(1);
       opacity: 1;
     }
+  }
+
+  .chart-tooltip {
+    @apply rounded-lg bg-white p-3 shadow-lg dark:bg-gray-800;
+  }
+
+  .chart-tooltip-title {
+    @apply mb-2 text-sm font-medium text-gray-900 dark:text-white;
+  }
+
+  .chart-tooltip-value {
+    @apply flex items-center gap-2 text-sm;
+  }
+
+  .chart-legend {
+    @apply mt-4 flex items-center justify-center gap-6;
+  }
+
+  .chart-legend-item {
+    @apply flex items-center gap-2;
+  }
+
+  .chart-legend-dot {
+    @apply h-3 w-3 rounded-full;
+  }
+
+  .chart-legend-label {
+    @apply text-sm text-gray-600 dark:text-gray-400;
   }
 }
 
