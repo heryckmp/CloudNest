@@ -16,18 +16,17 @@ const Page = async ({ searchParams, params }: SearchParamProps) => {
   const files = await getFiles({ types, searchText, sort });
 
   return (
-    <div className="page-container">
+    <div className="container mx-auto p-6">
       <section className="w-full">
-        <h1 className="h1 capitalize">{type}</h1>
+        <h1 className="mb-6 text-3xl font-bold capitalize text-gray-900 dark:text-white">{type}</h1>
 
-        <div className="total-size-section">
-          <p className="body-1">
-            Total: <span className="h5">0 MB</span>
+        <div className="mb-8 flex items-center justify-between">
+          <p className="text-base font-medium text-gray-700 dark:text-gray-300">
+            Total: <span className="text-xl font-bold">0 MB</span>
           </p>
 
-          <div className="sort-container">
-            <p className="body-1 hidden text-light-200 sm:block">Sort by:</p>
-
+          <div className="flex items-center gap-4">
+            <p className="hidden text-base text-gray-500 sm:block">Sort by:</p>
             <Sort />
           </div>
         </div>
@@ -35,7 +34,7 @@ const Page = async ({ searchParams, params }: SearchParamProps) => {
 
       {/* Render the files */}
       {!files?.documents ? (
-        <section className="file-list">
+        <section className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           <CardSkeleton />
           <CardSkeleton />
           <CardSkeleton />
@@ -44,13 +43,13 @@ const Page = async ({ searchParams, params }: SearchParamProps) => {
           <CardSkeleton />
         </section>
       ) : files.total > 0 ? (
-        <section className="file-list">
+        <section className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {files.documents.map((file: Models.Document) => (
             <Card key={file.$id} file={file} />
           ))}
         </section>
       ) : (
-        <p className="empty-list">No files uploaded</p>
+        <p className="mt-8 text-center text-lg text-gray-500 dark:text-gray-400">No files uploaded</p>
       )}
     </div>
   );

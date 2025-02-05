@@ -207,7 +207,7 @@
 
   /* Dashboard */
   .dashboard-container {
-    @apply mx-auto grid max-w-7xl grid-cols-1 gap-6 p-6 !important;
+    @apply container mx-auto p-6 space-y-8;
   }
 
   /* Storage Chart Section */
@@ -526,13 +526,12 @@
 
   /* Novos ícones modernos */
   .card-icon {
-    @apply w-12 h-12 mb-3 flex items-center justify-center relative !important;
+    @apply flex items-center justify-center size-12 rounded-lg transition-transform duration-300;
   }
 
   /* Ícone Documents */
-  .documents-icon::before {
-    content: '';
-    @apply absolute w-8 h-10 bg-blue-500 dark:bg-blue-400 rounded-lg transform transition-transform duration-300 !important;
+  .documents-icon {
+    @apply bg-gray-100 text-gray-600 dark:bg-gray-800/60 dark:text-gray-300 hover:rotate-6;
   }
   .group:hover .documents-icon::before {
     @apply rotate-6 !important;
@@ -547,20 +546,20 @@
 
   /* Ícone Images */
   .images-icon {
-    @apply relative !important;
+    @apply bg-gray-100 text-gray-600 dark:bg-gray-800/60 dark:text-gray-300 hover:scale-110;
   }
   .images-icon::before {
     content: '';
-    @apply absolute w-10 h-10 border-4 border-pink-400 dark:border-pink-300 rounded-lg transform rotate-45 transition-transform duration-300 group-hover:rotate-[60deg] !important;
+    @apply absolute w-10 h-10 border-4 border-blue-400 dark:border-blue-300 rounded-lg transform rotate-45 transition-transform duration-300 group-hover:rotate-[60deg] !important;
   }
   .images-icon::after {
     content: '';
-    @apply absolute w-4 h-4 bg-pink-400 dark:bg-pink-300 rounded-full top-2 right-2 transform transition-all duration-300 group-hover:scale-125 !important;
+    @apply absolute w-4 h-4 bg-blue-400 dark:bg-blue-300 rounded-full top-2 right-2 transform transition-all duration-300 group-hover:scale-125 !important;
   }
 
   /* Ícone Media */
   .media-icon {
-    @apply relative !important;
+    @apply bg-gray-100 text-gray-600 dark:bg-gray-800/60 dark:text-gray-300 hover:rotate-12;
   }
   .media-icon::before {
     content: '';
@@ -573,7 +572,7 @@
 
   /* Ícone Others */
   .others-icon {
-    @apply relative !important;
+    @apply bg-gray-100 text-gray-600 dark:bg-gray-800/60 dark:text-gray-300 hover:translate-y-1;
   }
   .others-icon::before {
     content: '';
@@ -594,6 +593,31 @@
   }
   .group:hover .group-hover\:translate-y-1 {
     @apply translate-y-1 !important;
+  }
+
+  /* Card Title Animations */
+  .group:hover .card-icon + div span {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .group:hover .card-icon + div div {
+    animation: pulse 1.5s infinite;
+  }
+
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.5);
+      opacity: 0.7;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
   }
 }
 
@@ -689,4 +713,28 @@
 
 .dark .primary-btn {
   @apply bg-[#FFB5C5] hover:bg-[#FFA5B8] text-[#1a2b45] !important;
+}
+
+/* Storage Chart */
+.storage-section circle {
+  transform-origin: center;
+  transform: rotate(-90deg);
+  transition: stroke-dashoffset 1s ease-in-out;
+}
+
+.storage-section circle:nth-child(2) {
+  stroke: #3B82F6;
+}
+
+.dark .storage-section circle:nth-child(2) {
+  stroke: #60A5FA;
+}
+
+@keyframes fillProgress {
+  from {
+    stroke-dashoffset: 565.48; /* 2 * PI * 90 */
+  }
+  to {
+    stroke-dashoffset: var(--progress-offset);
+  }
 }

@@ -23,30 +23,30 @@ const Card = ({ file, isLoading }: CardProps) => {
   const fileUrl = constructFileUrl(file.bucketFileId);
 
   return (
-    <Link href={fileUrl} target="_blank" className="file-card">
+    <Link href={fileUrl} target="_blank" className="block rounded-lg bg-white p-4 shadow-sm transition-shadow hover:shadow-md dark:bg-gray-800">
       <div className="flex items-center gap-4">
         <Thumbnail
           type={file.type}
           extension={file.extension}
           url={fileUrl}
-          className="w-12 h-12"
-          imageClassName="w-full h-full"
+          className="h-12 w-12"
+          imageClassName="h-full w-full"
         />
 
-        <div className="flex-1">
-          <p className="subtitle-2 line-clamp-1">{file.name}</p>
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-semibold line-clamp-1">{file.name}</p>
           <FormattedDateTime
             date={file.$createdAt}
-            className="body-2 text-light-100"
+            className="text-sm text-gray-500 dark:text-gray-400"
           />
-          <p className="caption line-clamp-1 text-light-200">
+          <p className="text-xs line-clamp-1 text-gray-400 dark:text-gray-500">
             By: {file.ownerId}
           </p>
         </div>
 
         <div className="flex flex-col items-end justify-between">
           <ActionDropdown file={file} />
-          <p className="body-1">{convertFileSize(file.size)}</p>
+          <p className="text-base font-medium">{convertFileSize(file.size)}</p>
         </div>
       </div>
     </Link>

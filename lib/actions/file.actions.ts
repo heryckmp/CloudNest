@@ -38,9 +38,10 @@ const getEnumFileType = (type: string): FileType => {
 
 export const uploadFile = async ({
   file,
+  ownerId,
   accountId,
   path,
-}: Omit<UploadFileProps, 'ownerId'>): Promise<boolean> => {
+}: UploadFileProps): Promise<boolean> => {
   try {
     console.log('Starting file upload process with:', {
       bucketId: appwriteConfig.bucketId,
@@ -85,7 +86,7 @@ export const uploadFile = async ({
             extension,
             bucketFileId: uploadedFile.$id,
             accountId,
-            ownerId: accountId,
+            ownerId,
             users: [accountId]
           }
         });
@@ -101,7 +102,7 @@ export const uploadFile = async ({
             extension,
             bucketFileId: uploadedFile.$id,
             accountId,
-            ownerId: accountId,
+            ownerId,
             users: [accountId]
           }
         );

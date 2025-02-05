@@ -5,15 +5,8 @@ import Image from "next/image";
 import { navItems } from "@/constants";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { ThemeToggle } from "@/components/theme-toggle";
 
-interface Props {
-  fullName: string;
-  avatar: string;
-  email: string;
-}
-
-const Sidebar = ({ fullName, avatar, email }: Props) => {
+const Sidebar = () => {
   const pathname = usePathname();
 
   return (
@@ -55,23 +48,28 @@ const Sidebar = ({ fullName, avatar, email }: Props) => {
         </ul>
       </nav>
 
-      <div className="flex flex-col gap-4">
-        <ThemeToggle />
-      <div className="sidebar-user-info">
+      <a 
+        href="https://github.com/heryckmp" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        className="flex items-center justify-center gap-2 px-4 py-3 mt-auto rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all group"
+      >
         <Image
-          src={avatar}
-          alt="Avatar"
-          width={44}
-          height={44}
-          className="sidebar-user-avatar"
+          src="/assets/icons/github.svg"
+          alt="GitHub"
+          width={24}
+          height={24}
+          className="text-gray-700 dark:text-gray-300 group-hover:text-brand dark:group-hover:text-brand transition-colors"
         />
-        <div className="hidden lg:block">
-          <p className="subtitle-2 capitalize">{fullName}</p>
-          <p className="caption">{email}</p>
-          </div>
+        <div className="hidden lg:flex flex-col items-start">
+          <span className="text-xs text-gray-500 dark:text-gray-400">Created by</span>
+          <span className="text-sm font-medium text-gray-700 dark:text-gray-300 group-hover:text-brand dark:group-hover:text-brand">
+            Erick Moreira
+          </span>
         </div>
-      </div>
+      </a>
     </aside>
   );
 };
+
 export default Sidebar;

@@ -21,7 +21,7 @@ const Thumbnail = ({
   const defaultIcon = `/assets/icons/file-${type}.svg`;
 
   return (
-    <figure className={cn("thumbnail", className)}>
+    <figure className={cn("relative flex h-10 w-10 items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-800", className)}>
       {isImage && url ? (
         <Image
           src={url}
@@ -29,9 +29,8 @@ const Thumbnail = ({
           width={100}
           height={100}
           className={cn(
-            "size-8 object-cover rounded-full",
-            imageClassName,
-            "thumbnail-image"
+            "h-8 w-8 rounded-full object-cover",
+            imageClassName
           )}
           unoptimized={true}
           priority={true}
@@ -43,7 +42,7 @@ const Thumbnail = ({
           width={100}
           height={100}
           className={cn(
-            "size-8 object-contain",
+            "h-8 w-8 object-contain",
             imageClassName
           )}
         />

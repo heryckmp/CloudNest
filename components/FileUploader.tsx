@@ -43,12 +43,12 @@ const FileUploader = ({ ownerId, accountId, className }: Props) => {
 
           toast({
             description: (
-              <p className="body-2 text-white">
+              <p className="text-sm font-normal text-white">
                 <span className="font-semibold">{file.name}</span> is too large.
                 Max file size is 50MB.
               </p>
             ),
-            className: "error-toast",
+            className: "bg-destructive",
           });
           continue;
         }
@@ -95,10 +95,11 @@ const FileUploader = ({ ownerId, accountId, className }: Props) => {
 
           toast({
             description: (
-              <p className="body-2 text-white">
+              <p className="text-sm font-normal text-white">
                 <span className="font-semibold">{file.name}</span> uploaded successfully!
               </p>
             ),
+            className: "bg-green-500",
           });
         } catch (error) {
           console.error(`Error uploading ${file.name}:`, {
@@ -112,11 +113,11 @@ const FileUploader = ({ ownerId, accountId, className }: Props) => {
           
           toast({
             description: (
-              <p className="body-2 text-white">
+              <p className="text-sm font-normal text-white">
                 Failed to upload <span className="font-semibold">{file.name}</span>. Please try again.
               </p>
             ),
-            className: "error-toast",
+            className: "bg-destructive",
           });
         } finally {
           console.log('Cleaning up file states:', file.name);
@@ -150,19 +151,19 @@ const FileUploader = ({ ownerId, accountId, className }: Props) => {
   return (
     <div {...getRootProps()} className="cursor-pointer">
       <input {...getInputProps()} />
-      <Button type="button" className={cn("uploader-button", className)}>
+      <Button type="button" className={cn("flex items-center gap-2 bg-primary text-white hover:bg-primary/90", className)}>
         <Image
           src="/assets/icons/upload.svg"
           alt="upload"
           width={24}
           height={24}
-          className="w-6 h-6"
+          className="h-6 w-6"
         />
         <p>Upload</p>
       </Button>
       {files.length > 0 && (
-        <ul className="uploader-preview-list">
-          <h4 className="h4 text-black dark:text-white">Uploading</h4>
+        <ul className="mt-4 space-y-4 rounded-lg bg-gray-50 p-4 dark:bg-gray-800">
+          <h4 className="text-lg font-bold text-black dark:text-white">Uploading</h4>
 
           {files.map((file, index) => {
             const { type, extension } = getFileType(file.name);
@@ -171,7 +172,7 @@ const FileUploader = ({ ownerId, accountId, className }: Props) => {
             return (
               <li
                 key={`${file.name}-${index}`}
-                className="uploader-preview-item"
+                className="flex items-center justify-between rounded-md bg-white p-3 shadow-sm dark:bg-gray-700"
               >
                 <div className="flex items-center gap-3">
                   <Thumbnail
@@ -180,15 +181,15 @@ const FileUploader = ({ ownerId, accountId, className }: Props) => {
                     url={convertFileToUrl(file)}
                   />
 
-                  <div className="preview-item-name">
-                    {file.name}
+                  <div className="flex flex-col">
+                    <span className="text-sm font-medium">{file.name}</span>
                     {isUploading && (
                       <Image
                         src="/assets/icons/file-loader.gif"
                         width={80}
                         height={26}
                         alt="Loader"
-                        className="w-20 h-auto"
+                        className="h-auto w-20"
                       />
                     )}
                   </div>
@@ -200,7 +201,7 @@ const FileUploader = ({ ownerId, accountId, className }: Props) => {
                     width={24}
                     height={24}
                     alt="Remove"
-                    className="w-6 h-6"
+                    className="h-6 w-6 cursor-pointer"
                     onClick={(e) => handleRemoveFile(e, file.name)}
                   />
                 )}
