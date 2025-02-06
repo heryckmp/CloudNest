@@ -18,7 +18,12 @@ const Page = async ({ searchParams, params }: SearchParamProps) => {
   return (
     <div className="container mx-auto p-6">
       <section className="w-full">
-        <h1 className="mb-6 text-3xl font-bold capitalize text-gray-900 dark:text-white">{type}</h1>
+        <h1 className="mb-6 text-3xl font-bold capitalize text-gray-900 dark:text-white">
+          {type === "documents" ? "Documentos" :
+           type === "images" ? "Imagens" :
+           type === "media" ? "Mídia" :
+           "Outros"}
+        </h1>
 
         <div className="mb-8 flex items-center justify-between">
           <p className="text-base font-medium text-gray-700 dark:text-gray-300">
@@ -26,13 +31,13 @@ const Page = async ({ searchParams, params }: SearchParamProps) => {
           </p>
 
           <div className="flex items-center gap-4">
-            <p className="hidden text-base text-gray-500 sm:block">Sort by:</p>
+            <p className="hidden text-base text-gray-500 sm:block">Ordenar por:</p>
             <Sort />
           </div>
         </div>
       </section>
 
-      {/* Render the files */}
+      {/* Renderiza os arquivos */}
       {!files?.documents ? (
         <section className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           <CardSkeleton />
@@ -49,7 +54,9 @@ const Page = async ({ searchParams, params }: SearchParamProps) => {
           ))}
         </section>
       ) : (
-        <p className="mt-8 text-center text-lg text-gray-500 dark:text-gray-400">No files uploaded</p>
+        <p className="mt-8 text-center text-lg text-gray-500 dark:text-gray-400">
+          Nenhum arquivo encontrado
+        </p>
       )}
     </div>
   );

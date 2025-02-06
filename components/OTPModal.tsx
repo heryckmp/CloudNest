@@ -42,20 +42,20 @@ const OtpModal = ({
 
     try {
       if (!password || password.length !== 6) {
-        throw new Error("Please enter a valid 6-digit code");
+        throw new Error("Por favor, digite um código válido de 6 dígitos");
       }
 
       const result = await verifySecret({ accountId, password });
 
       if (!result?.sessionId) {
-        throw new Error("Failed to verify code. Please try again.");
+        throw new Error("Falha ao verificar código. Por favor, tente novamente.");
       }
 
       router.refresh();
       router.push("/");
     } catch (error) {
-      console.error("Failed to verify OTP:", error);
-      setError(error instanceof Error ? error.message : "Failed to verify code. Please try again.");
+      console.error("Falha ao verificar OTP:", error);
+      setError(error instanceof Error ? error.message : "Falha ao verificar código. Por favor, tente novamente.");
     } finally {
       setIsLoading(false);
     }
@@ -68,8 +68,8 @@ const OtpModal = ({
       await sendEmailOTP({ email });
       setPassword("");
     } catch (error) {
-      console.error("Failed to resend OTP:", error);
-      setError("Failed to resend code. Please try again.");
+      console.error("Falha ao reenviar OTP:", error);
+      setError("Falha ao reenviar código. Por favor, tente novamente.");
     } finally {
       setIsResending(false);
     }
@@ -80,10 +80,10 @@ const OtpModal = ({
       <AlertDialogContent className="shad-alert-dialog">
         <AlertDialogHeader className="relative flex justify-center">
           <AlertDialogTitle className="h2 text-center">
-            Enter Your OTP
+            Digite seu Código
             <Image
               src="/assets/icons/close-dark.svg"
-              alt="close"
+              alt="fechar"
               width={20}
               height={20}
               onClick={() => setIsOpen(false)}
@@ -91,7 +91,7 @@ const OtpModal = ({
             />
           </AlertDialogTitle>
           <AlertDialogDescription className="subtitle-2 text-center text-light-100">
-            We&apos;ve sent a code to{" "}
+            Enviamos um código para{" "}
             <span className="pl-1 text-brand">{email}</span>
           </AlertDialogDescription>
         </AlertDialogHeader>
@@ -128,11 +128,11 @@ const OtpModal = ({
               type="button"
               disabled={isLoading || password.length !== 6}
             >
-              {isLoading ? "Verifying..." : "Submit"}
+              {isLoading ? "Verificando..." : "Enviar"}
               {isLoading && (
                 <Image
                   src="/assets/icons/loader.svg"
-                  alt="loader"
+                  alt="carregando"
                   width={24}
                   height={24}
                   className="ml-2 animate-spin"
@@ -141,7 +141,7 @@ const OtpModal = ({
             </AlertDialogAction>
 
             <div className="subtitle-2 mt-2 text-center text-light-100">
-              Didn&apos;t get a code?
+              Não recebeu o código?
               <Button
                 type="button"
                 variant="link"
@@ -149,7 +149,7 @@ const OtpModal = ({
                 onClick={handleResendOtp}
                 disabled={isResending}
               >
-                {isResending ? "Sending..." : "Click to resend"}
+                {isResending ? "Enviando..." : "Clique para reenviar"}
               </Button>
             </div>
           </div>

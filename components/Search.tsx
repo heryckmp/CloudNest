@@ -57,7 +57,7 @@ const Search = () => {
     <div className="relative w-full max-w-md">
       <Input
         type="text"
-        placeholder="Search files..."
+        placeholder="Pesquisar arquivos..."
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         className="w-full rounded-lg border bg-white px-4 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:bg-gray-800"

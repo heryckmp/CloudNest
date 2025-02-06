@@ -24,10 +24,10 @@ type FormType = "sign-in" | "sign-up";
 
 const authFormSchema = (formType: FormType) => {
   return z.object({
-    email: z.string().email(),
+    email: z.string().email("Email inválido"),
     fullName:
       formType === "sign-up"
-        ? z.string().min(2).max(50)
+        ? z.string().min(2, "Nome deve ter pelo menos 2 caracteres").max(50, "Nome deve ter no máximo 50 caracteres")
         : z.string().optional(),
   });
 };
@@ -63,7 +63,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
         setAccountId(user.accountId);
       }
     } catch {
-      setErrorMessage("Failed to create account. Please try again.");
+      setErrorMessage("Falha ao criar conta. Por favor, tente novamente.");
     } finally {
       setIsLoading(false);
     }
@@ -74,7 +74,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="auth-form">
           <h1 className="form-title">
-            {type === "sign-in" ? "Sign In" : "Sign Up"}
+            {type === "sign-in" ? "Entrar" : "Cadastrar"}
           </h1>
           {type === "sign-up" && (
             <FormField
@@ -83,11 +83,11 @@ const AuthForm = ({ type }: { type: FormType }) => {
               render={({ field }) => (
                 <FormItem>
                   <div className="shad-form-item">
-                    <FormLabel className="shad-form-label">Full Name</FormLabel>
+                    <FormLabel className="shad-form-label">Nome Completo</FormLabel>
 
                     <FormControl>
                       <Input
-                        placeholder="Enter your full name"
+                        placeholder="Digite seu nome completo"
                         className="shad-input bg-transparent h-12 text-lg tracking-wide font-medium text-black dark:text-white focus:ring-2 focus:ring-brand dark:focus:ring-brand-dark placeholder:text-gray-400/70 dark:placeholder:text-gray-500/70 !important"
                         {...field}
                       />
@@ -110,7 +110,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
 
                   <FormControl>
                     <Input
-                      placeholder="Enter your email"
+                      placeholder="Digite seu email"
                       className="shad-input bg-transparent h-12 text-lg tracking-wide font-medium text-black dark:text-white focus:ring-2 focus:ring-brand dark:focus:ring-brand-dark placeholder:text-gray-400/70 dark:placeholder:text-gray-500/70 !important"
                       {...field}
                     />
@@ -127,12 +127,12 @@ const AuthForm = ({ type }: { type: FormType }) => {
             className="form-submit-button"
             disabled={isLoading}
           >
-            {type === "sign-in" ? "Sign In" : "Sign Up"}
+            {type === "sign-in" ? "Entrar" : "Cadastrar"}
 
             {isLoading && (
               <Image
                 src="/assets/icons/loader.svg"
-                alt="loader"
+                alt="carregando"
                 width={24}
                 height={24}
                 className="ml-2 animate-spin"
@@ -145,15 +145,15 @@ const AuthForm = ({ type }: { type: FormType }) => {
           <div className="body-2 flex justify-center">
             <p className="text-auth">
               {type === "sign-in"
-                ? "Don't have an account?"
-                : "Already have an account?"}
+                ? "Não tem uma conta?"
+                : "Já tem uma conta?"}
             </p>
             <Link
               href={type === "sign-in" ? "/sign-up" : "/sign-in"}
               className="ml-1 font-medium auth-link"
             >
               {" "}
-              {type === "sign-in" ? "Sign Up" : "Sign In"}
+              {type === "sign-in" ? "Cadastre-se" : "Entre"}
             </Link>
           </div>
 
@@ -171,7 +171,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
               className="text-gray-700 dark:text-gray-300 group-hover:text-brand dark:group-hover:text-brand transition-colors"
             />
             <div className="flex flex-col items-start">
-              <span className="text-xs text-gray-500 dark:text-gray-400">Created by</span>
+              <span className="text-xs text-gray-500 dark:text-gray-400">Criado por</span>
               <span className="text-sm font-medium text-gray-700 dark:text-gray-300 group-hover:text-brand dark:group-hover:text-brand">
                 Erick Moreira
               </span>

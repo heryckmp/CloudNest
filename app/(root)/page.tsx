@@ -1,4 +1,4 @@
-import { getFiles, getTotalSpaceUsed } from "@/lib/actions/file.actions";
+import { getFiles, getTotalSpaceUsed, getActivityData } from "@/lib/actions/file.actions";
 import { getUsageSummary, constructFileUrl } from "@/lib/utils";
 import Link from "next/link";
 import { Models } from "node-appwrite";
@@ -9,20 +9,10 @@ import Image from "next/image";
 import StorageChart from "@/components/StorageChart";
 import ActivityChart from "@/components/ActivityChart";
 
-// Mock data for activity chart - In a real app, this would come from your backend
-const activityData = [
-  { date: '01/03', uploads: 4, downloads: 2 },
-  { date: '02/03', uploads: 3, downloads: 4 },
-  { date: '03/03', uploads: 5, downloads: 3 },
-  { date: '04/03', uploads: 2, downloads: 6 },
-  { date: '05/03', uploads: 6, downloads: 4 },
-  { date: '06/03', uploads: 4, downloads: 3 },
-  { date: '07/03', uploads: 3, downloads: 5 },
-];
-
 const Dashboard = async () => {
   const files = await getFiles({ types: [], searchText: "", sort: "$createdAt-desc" });
   const totalSpace = await getTotalSpaceUsed();
+  const activityData = await getActivityData();
   
   if (!totalSpace) {
     return (
@@ -34,9 +24,12 @@ const Dashboard = async () => {
 
   const summary = getUsageSummary(totalSpace);
   
-  // Prepare data for the storage chart
+  // Prepara dados para o gráfico de armazenamento
   const storageChartData = summary.map(item => ({
-    name: item.title,
+    name: item.title === 'Documents' ? 'Documentos' :
+         item.title === 'Images' ? 'Imagens' :
+         item.title === 'Media' ? 'Mídia' :
+         'Outros',
     size: parseInt(item.size),
     color: item.title === 'Documents' ? '#FF9B9D' :
            item.title === 'Images' ? '#3B82F6' :
@@ -47,7 +40,7 @@ const Dashboard = async () => {
   return (
     <main className="dashboard-container">
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        {/* Storage Usage Section */}
+        {/* Seção de Uso de Armazenamento */}
         <section className="rounded-xl bg-white p-6 shadow-sm dark:bg-gray-800">
           <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
             Uso do Armazenamento
@@ -63,14 +56,20 @@ const Dashboard = async () => {
                 <div className={`card-icon ${item.title.toLowerCase()}-icon mb-2`}>
                   <Image
                     src={item.icon}
-                    alt={item.title}
+                    alt={item.title === 'Documents' ? 'Documentos' :
+                         item.title === 'Images' ? 'Imagens' :
+                         item.title === 'Media' ? 'Mídia' :
+                         'Outros'}
                     width={24}
                     height={24}
                     className="size-6"
                   />
                 </div>
                 <p className="text-sm font-medium text-gray-900 dark:text-white">
-                  {item.title}
+                  {item.title === 'Documents' ? 'Documentos' :
+                   item.title === 'Images' ? 'Imagens' :
+                   item.title === 'Media' ? 'Mídia' :
+                   'Outros'}
                 </p>
                 <p className="text-xs text-gray-500 dark:text-gray-400">
                   {item.size}
@@ -80,7 +79,7 @@ const Dashboard = async () => {
           </div>
         </section>
 
-        {/* Activity Chart Section */}
+        {/* Seção de Gráfico de Atividade */}
         <section className="rounded-xl bg-white p-6 shadow-sm dark:bg-gray-800">
           <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
             Atividade Recente
@@ -89,7 +88,7 @@ const Dashboard = async () => {
           <div className="mt-4 flex items-center justify-center gap-6">
             <div className="flex items-center gap-2">
               <div className="h-3 w-3 rounded-full bg-brand" />
-              <span className="text-sm text-gray-600 dark:text-gray-400">Uploads</span>
+              <span className="text-sm text-gray-600 dark:text-gray-400">Envios</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="h-3 w-3 rounded-full bg-[#10B981]" />
@@ -99,7 +98,7 @@ const Dashboard = async () => {
         </section>
       </div>
 
-      {/* Recent Files Section */}
+      {/* Seção de Arquivos Recentes */}
       <section className="mt-6">
         <div className="mb-6 flex items-center justify-between">
           <h2 className="text-xl font-bold text-gray-900 dark:text-white">

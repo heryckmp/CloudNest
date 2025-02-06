@@ -16,14 +16,14 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           />
 
           <div className="space-y-5 text-white">
-            <h1 className="h1">Manage your files the best way</h1>
+            <h1 className="h1">Gerencie seus arquivos da melhor forma</h1>
             <p className="body-1">
-              This is a place where you can store all your documents.
+              Este é um lugar onde você pode armazenar todos os seus documentos.
             </p>
           </div>
           <Image
             src="/assets/images/files.png"
-            alt="Files"
+            alt="Arquivos"
             width={342}
             height={342}
             priority

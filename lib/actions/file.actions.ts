@@ -324,3 +324,71 @@ export async function getTotalSpaceUsed() {
     return null;
   }
 }
+
+export async function getActivityData() {
+  try {
+    const client = await createAdminClient();
+    const currentDate = new Date();
+    const last7Days = Array.from({ length: 7 }, (_, i) => {
+      const date = new Date();
+      date.setDate(currentDate.getDate() - (6 - i));
+      return date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+    });
+
+    // Buscar todos os arquivos dos últimos 7 dias
+    const files = await client.databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.filesCollectionId,
+      [
+        Query.greaterThanEqual('$createdAt', new Date(currentDate.setDate(currentDate.getDate() - 7)).toISOString()),
+        Query.orderAsc('$createdAt')
+      ]
+    );
+
+    // Agrupar arquivos por data
+    const activityByDate = last7Days.map(date => {
+      const dayFiles = files.documents.filter(file => {
+        const fileDate = new Date(file.$createdAt).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+        return fileDate === date;
+      });
+
+      return {
+        date,
+        uploads: dayFiles.length,
+        downloads: dayFiles.reduce((acc, file) => acc + (file.downloads || 0), 0)
+      };
+    });
+
+    return activityByDate;
+  } catch (error) {
+    console.error('Erro ao buscar dados de atividade:', error);
+    return [];
+  }
+}
+
+export async function incrementDownloadCount(fileId: string) {
+  try {
+    const client = await createAdminClient();
+    const file = await client.databases.getDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.filesCollectionId,
+      fileId
+    );
+
+    const downloads = (file.downloads || 0) + 1;
+
+    await client.databases.updateDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.filesCollectionId,
+      fileId,
+      {
+        downloads
+      }
+    );
+
+    return true;
+  } catch (error) {
+    console.error('Erro ao atualizar contador de downloads:', error);
+    return false;
+  }
+}
