@@ -1,263 +1,198 @@
 "use client";
 
 import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useState } from "react";
-import Image from "next/image";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Models } from "node-appwrite";
-import { constructDownloadUrl } from "@/lib/utils";
+import Image from "next/image";
+import { useState } from "react";
+import { actionsDropdownItems } from "@/constants";
+import { FileDetails, ShareInput } from "@/components/ActionsModalContent";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {
-  deleteFile,
-  renameFile,
-  updateFileUsers,
-  incrementDownloadCount,
-} from "@/lib/actions/file.actions";
-import { usePathname } from "next/navigation";
-import { FileDetails, ShareInput } from "@/components/ActionsModalContent";
+import { renameFile, updateFileUsers, deleteFile } from "@/lib/actions/file.actions";
 import { useToast } from "@/components/ui/use-toast";
+import { constructDownloadUrl } from "@/lib/utils";
+import { usePathname } from "next/navigation";
+
+type ActionType = "rename" | "share" | "delete" | "details" | "download";
 
 const ActionDropdown = ({ file }: { file: Models.Document }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [action, setAction] = useState<"rename" | "share" | "delete" | "details" | null>(null);
-  const [name, setName] = useState(file.name);
+  const [action, setAction] = useState<ActionType | null>(null);
+  const [newName, setNewName] = useState(file.name);
+  const [emails, setEmails] = useState<string[]>(file.users || []);
   const [isLoading, setIsLoading] = useState(false);
-  const [emails, setEmails] = useState<string[]>([]);
   const { toast } = useToast();
   const path = usePathname() || "/";
 
   const closeAllModals = () => {
     setIsModalOpen(false);
-    setIsDropdownOpen(false);
     setAction(null);
-    setName(file.name);
+    setNewName(file.name);
+    setEmails(file.users || []);
   };
 
-  const handleAction = async () => {
-    if (!action || action === "details") return;
+  const handleAction = async (value: ActionType) => {
+    if (value === "download") {
+      window.open(constructDownloadUrl(file.bucketFileId), "_blank");
+      return;
+    }
+
+    if (value === "details") {
+      setAction(value);
+      setIsModalOpen(true);
+      return;
+    }
+
+    if (!value) return;
     setIsLoading(true);
-    let success = false;
 
-    const actions = {
-      rename: () =>
-        renameFile({ fileId: file.$id, name, extension: file.extension, path }),
-      share: () => updateFileUsers({ fileId: file.$id, emails, path }),
-      delete: () =>
-        deleteFile({ fileId: file.$id, bucketFileId: file.bucketFileId, path }),
-    };
-
-    success = await actions[action]();
-
-    if (success) closeAllModals();
-
-    setIsLoading(false);
-  };
-
-  const handleRemoveUser = async (email: string) => {
-    const updatedEmails = emails.filter((e) => e !== email);
-
-    const success = await updateFileUsers({
-      fileId: file.$id,
-      emails: updatedEmails,
-      path,
-    });
-
-    if (success) setEmails(updatedEmails);
-    closeAllModals();
-  };
-
-  const handleDownload = async () => {
     try {
-      const response = await fetch(constructDownloadUrl(file.bucketFileId));
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = file.name;
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
-      
-      // Incrementa o contador de downloads
-      await incrementDownloadCount(file.$id);
+      let success = false;
+
+      switch (value) {
+        case "rename":
+          success = await renameFile({ 
+            fileId: file.$id, 
+            name: newName, 
+            extension: file.extension, 
+            path 
+          });
+          break;
+        case "share":
+          success = await updateFileUsers({ 
+            fileId: file.$id, 
+            emails, 
+            path 
+          });
+          break;
+        case "delete":
+          success = await deleteFile({ 
+            fileId: file.$id, 
+            bucketFileId: file.bucketFileId, 
+            path 
+          });
+          break;
+      }
+
+      if (success) {
+        closeAllModals();
+        toast({
+          description: (
+            <p className="text-sm font-normal text-white">
+              {value === "rename" ? "Arquivo renomeado com sucesso" :
+               value === "share" ? "Compartilhamento atualizado" :
+               value === "delete" ? "Arquivo excluído com sucesso" : ""}
+            </p>
+          ),
+        });
+      }
     } catch (error) {
-      console.error('Erro ao baixar arquivo:', error);
+      console.error(`Error on ${value}:`, error);
       toast({
-        title: "Erro ao baixar arquivo",
-        description: "Ocorreu um erro ao tentar baixar o arquivo. Tente novamente.",
         variant: "destructive",
+        description: (
+          <p className="text-sm font-normal text-white">
+            Falha ao executar ação. Por favor, tente novamente.
+          </p>
+        ),
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const renderDialogContent = () => {
-    if (!action) return null;
+    if (!isModalOpen) return null;
 
     return (
-      <DialogContent className="shad-dialog button">
-        <DialogHeader className="flex flex-col gap-3">
-          <DialogTitle className="text-center text-light-100">
-            {action === "rename" && "Renomear"}
-            {action === "share" && "Compartilhar"}
-            {action === "delete" && "Excluir"}
-            {action === "details" && "Detalhes"}
-          </DialogTitle>
-          {action === "rename" && (
-            <Input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          )}
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent>
           {action === "details" && <FileDetails file={file} />}
           {action === "share" && (
             <ShareInput
               file={file}
               onInputChange={setEmails}
-              onRemove={handleRemoveUser}
+              onRemove={(email) => setEmails(emails.filter((e) => e !== email))}
             />
           )}
-          {action === "delete" && (
-            <p className="delete-confirmation">
-              Tem certeza que deseja excluir{` `}
-              <span className="delete-file-name">{file.name}</span>?
-            </p>
+          {action === "rename" && (
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">Renomear arquivo</h3>
+              <Input
+                type="text"
+                value={newName}
+                onChange={(e) => setNewName(e.target.value)}
+                className="w-full"
+              />
+              <div className="flex justify-end gap-2">
+                <Button variant="outline" onClick={closeAllModals}>
+                  Cancelar
+                </Button>
+                <Button onClick={() => handleAction("rename")} disabled={isLoading}>
+                  {isLoading ? "Renomeando..." : "Renomear"}
+                </Button>
+              </div>
+            </div>
           )}
-        </DialogHeader>
-        {["rename", "delete", "share"].includes(action) && (
-          <DialogFooter className="flex flex-col gap-3 md:flex-row">
-            <Button onClick={closeAllModals} className="modal-cancel-button">
-              Cancelar
-            </Button>
-            <Button onClick={handleAction} className="modal-submit-button">
-              <p className="capitalize">{action}</p>
-              {isLoading && (
-                <Image
-                  src="/assets/icons/loader.svg"
-                  alt="carregando"
-                  width={24}
-                  height={24}
-                  className="animate-spin"
-                />
-              )}
-            </Button>
-          </DialogFooter>
-        )}
-      </DialogContent>
+          {action === "delete" && (
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-red-500">Excluir arquivo</h3>
+              <p>Tem certeza que deseja excluir este arquivo?</p>
+              <div className="flex justify-end gap-2">
+                <Button variant="outline" onClick={closeAllModals}>
+                  Cancelar
+                </Button>
+                <Button 
+                  variant="destructive" 
+                  onClick={() => handleAction("delete")}
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Excluindo..." : "Excluir"}
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     );
   };
 
   return (
-    <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-      <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
-        <DropdownMenuTrigger asChild>
-          <div className="flex items-center justify-center p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full cursor-pointer">
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger className="outline-none">
+          <div className="rounded-full p-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-700">
             <Image
-              src="/assets/icons/more.svg"
-              alt="mais ações"
-              width={24}
-              height={24}
-              className="size-6"
+              src="/assets/icons/more-vertical.svg"
+              alt="opções"
+              width={20}
+              height={20}
+              className="opacity-50 transition-opacity hover:opacity-100"
             />
           </div>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem
-            onClick={() => {
-              setAction("rename");
-              setIsModalOpen(true);
-            }}
-            className="flex cursor-pointer items-center gap-2 px-3 py-2"
-          >
-            <Image
-              src="/assets/icons/edit.svg"
-              alt="renomear"
-              width={20}
-              height={20}
-              className="size-5"
-            />
-            Renomear
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => {
-              setAction("details");
-              setIsModalOpen(true);
-            }}
-            className="flex cursor-pointer items-center gap-2 px-3 py-2"
-          >
-            <Image
-              src="/assets/icons/info.svg"
-              alt="detalhes"
-              width={20}
-              height={20}
-              className="size-5"
-            />
-            Detalhes
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => {
-              setAction("share");
-              setIsModalOpen(true);
-            }}
-            className="flex cursor-pointer items-center gap-2 px-3 py-2"
-          >
-            <Image
-              src="/assets/icons/share.svg"
-              alt="compartilhar"
-              width={20}
-              height={20}
-              className="size-5"
-            />
-            Compartilhar
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={handleDownload}
-            className="flex cursor-pointer items-center gap-2 px-3 py-2"
-          >
-            <Image
-              src="/assets/icons/download.svg"
-              alt="baixar"
-              width={20}
-              height={20}
-              className="size-5"
-            />
-            Baixar
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => {
-              setAction("delete");
-              setIsModalOpen(true);
-            }}
-            className="flex cursor-pointer items-center gap-2 px-3 py-2 text-red-500 focus:text-red-500"
-          >
-            <Image
-              src="/assets/icons/delete.svg"
-              alt="excluir"
-              width={20}
-              height={20}
-              className="size-5"
-            />
-            Excluir
-          </DropdownMenuItem>
+        <DropdownMenuContent align="end" className="w-[160px]">
+          {actionsDropdownItems.map(({ label, icon, value }) => (
+            <DropdownMenuItem
+              key={value}
+              onClick={() => handleAction(value as ActionType)}
+              className="flex cursor-pointer items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
+            >
+              <Image src={icon} alt={label} width={16} height={16} />
+              {label}
+            </DropdownMenuItem>
+          ))}
         </DropdownMenuContent>
       </DropdownMenu>
 
       {renderDialogContent()}
-    </Dialog>
+    </>
   );
 };
 

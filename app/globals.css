@@ -192,10 +192,10 @@
 
   /* Sidebar & MobileNavigation */
   .nav-icon {
-    @apply w-6 filter invert opacity-25 !important;
+    @apply size-6 opacity-60 transition-opacity !important;
   }
   .nav-icon-active {
-    @apply invert-0 opacity-100 !important;
+    @apply opacity-100 !important;
   }
 
   /* =====  STYLE CLASSES */
@@ -413,7 +413,7 @@
     @apply flex-center min-w-fit gap-4 !important;
   }
   .sign-out-button {
-    @apply flex-center h-[52px] min-w-[54px] items-center rounded-full bg-[#3B82F6] text-white hover:bg-[#2563eb] dark:bg-[#3B82F6] dark:text-white dark:hover:bg-[#2563eb] shadow-none transition-all !important;
+    @apply h-[52px] rounded-full bg-brand/10 p-4 text-brand shadow-none transition-all hover:bg-brand/20 dark:bg-brand-dark/10 dark:text-brand-dark dark:hover:bg-brand-dark/20;
   }
 
   /* Mobile Navigation */
@@ -433,7 +433,7 @@
     @apply flex flex-1 flex-col gap-4 !important;
   }
   .mobile-nav-item {
-    @apply flex text-dark-100 dark:text-white gap-4 rounded-xl lg:w-full justify-center lg:justify-start items-center h5 lg:px-[30px] h-[52px] lg:rounded-full !important;
+    @apply flex text-dark-100 dark:text-white gap-4 rounded-xl lg:w-full justify-center lg:justify-start items-center h5 lg:px-[30px] h-[52px] lg:rounded-full bg-white hover:bg-gray-50 dark:bg-[#1E293B] dark:hover:bg-[#334766] transition-colors !important;
   }
   .mobile-sign-out-button {
     @apply h5 flex h-[52px] w-full items-center gap-4 rounded-full bg-[#3B82F6]/10 px-6 text-[#3B82F6] dark:bg-[#FFB5C5]/10 dark:text-[#FFB5C5] shadow-none transition-all hover:bg-[#3B82F6]/20 dark:hover:bg-[#FFB5C5]/20 !important;
@@ -469,7 +469,7 @@
     @apply h5 mt-9 flex-1 gap-1 text-brand !important;
   }
   .sidebar-nav-item {
-    @apply flex text-black gap-4 rounded-xl lg:w-full justify-center lg:justify-start items-center h5 lg:px-[30px] h-[52px] lg:rounded-full !important;
+    @apply flex text-dark-100 dark:text-white gap-4 rounded-xl lg:w-full justify-center lg:justify-start items-center h5 lg:px-[30px] h-[52px] lg:rounded-full bg-white hover:bg-gray-50 dark:bg-[#1E293B] dark:hover:bg-[#334766] transition-colors !important;
   }
   .sidebar-user-info {
     @apply mt-4 flex items-center justify-center gap-2 rounded-full bg-brand/10 p-1 text-light-100 lg:justify-start lg:p-3 !important;
@@ -479,7 +479,7 @@
   }
 
   .shad-active {
-    @apply bg-[#3B82F6] text-white shadow-drop-2 !important;
+    @apply bg-brand/10 text-brand dark:bg-brand-dark/10 dark:text-brand-dark !important;
   }
 
   /* Sort */

@@ -17,7 +17,14 @@ const Sidebar = () => {
           alt="CloudNest Logo"
           width={240}
           height={50}
-          className="w-[180px] h-auto"
+          className="w-[180px] h-auto dark:hidden"
+        />
+        <Image
+          src="/assets/icons/logo-full-cloudnest-white.svg"
+          alt="CloudNest Logo"
+          width={240}
+          height={50}
+          className="w-[180px] h-auto hidden dark:block"
         />
       </Link>
 

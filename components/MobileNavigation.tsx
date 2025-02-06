@@ -43,16 +43,24 @@ const MobileNavigation = ({
         alt="CloudNest Logo"
         width={240}
         height={50}
-        className="w-[180px] h-auto"
+        className="w-[180px] h-auto dark:hidden"
+      />
+      <Image
+        src="/assets/icons/logo-full-cloudnest-white.svg"
+        alt="CloudNest Logo"
+        width={240}
+        height={50}
+        className="w-[180px] h-auto hidden dark:block"
       />
 
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger>
           <Image
             src="/assets/icons/menu.svg"
-            alt="Search"
+            alt="Menu"
             width={30}
             height={30}
+            className="opacity-60 transition-opacity hover:opacity-100"
           />
         </SheetTrigger>
         <SheetContent className="shad-sheet h-screen px-3">
@@ -116,6 +124,7 @@ const MobileNavigation = ({
                   alt="logo"
                   width={24}
                   height={24}
+                  className="opacity-60 transition-opacity hover:opacity-100"
                 />
                 <p>Logout</p>
               </Button>

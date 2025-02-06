@@ -7,7 +7,7 @@ import { handleSignOut } from "@/lib/actions/signout";
 export function SignOutButton() {
   return (
     <form action={handleSignOut}>
-      <Button type="submit" className="sign-out-button">
+      <Button type="submit" className="sign-out-button flex items-center gap-2">
         <Image
           src="/assets/icons/logout.svg"
           alt="logout"
@@ -15,6 +15,7 @@ export function SignOutButton() {
           height={24}
           className="w-6"
         />
+        <span className="hidden lg:inline">Logout</span>
       </Button>
     </form>
   );

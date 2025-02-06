@@ -1,17 +1,17 @@
-# CloudNest - Modern Storage Management Solution
+# CloudNest - Solução Moderna de Gerenciamento de Armazenamento
 
 <div align="center">
   <br />
     <img 
       src="https://raw.githubusercontent.com/heryckmp/CloudNest/main/public/assets/images/cloudnest-banner.png" 
-      alt="CloudNest - Modern Storage Management Solution"
+      alt="CloudNest - Solução Moderna de Gerenciamento de Armazenamento"
       style="width: 100%; max-width: 1200px; border-radius: 10px;"
     />
   <br />
 
   <div>
-     <img src="https://img.shields.io/badge/-Next_JS-black?style=for-the-badge&logoColor=white&logo=nextdotjs&color=000000" alt="nextdotjs" />
-    <img src="https://img.shields.io/badge/-TypeScript-black?style=for-the-badge&logoColor=white&logo=typescript&color=3178C6" alt="typescript" />
+     <img src="https://img.shields.io/badge/-Next_JS_15-black?style=for-the-badge&logoColor=white&logo=nextdotjs&color=000000" alt="nextdotjs" />
+    <img src="https://img.shields.io/badge/-TypeScript_5-black?style=for-the-badge&logoColor=white&logo=typescript&color=3178C6" alt="typescript" />
     <img src="https://img.shields.io/badge/-Tailwind_CSS-black?style=for-the-badge&logoColor=white&logo=tailwindcss&color=06B6D4" alt="tailwindcss" />
     <img src="https://img.shields.io/badge/-Appwrite-black?style=for-the-badge&logoColor=white&logo=appwrite&color=FD366E" alt="appwrite" />
   </div>
@@ -31,74 +31,95 @@
 5. 🤸 [Início Rápido](#início-rápido)
 6. 🎨 [Sistema de Design](#sistema-de-design)
 7. 🔒 [Segurança](#segurança)
-8. 🤖 [Assistente AI](#assistente-ai)
+8. 🤖 [Assistente IA](#assistente-ia)
 9. 🔄 [Atualizações Recentes](#atualizações-recentes)
 
 ## 🚀 Introdução
 
-CloudNest é uma plataforma de gerenciamento de armazenamento e compartilhamento de arquivos de última geração que revoluciona a forma como os usuários interagem com seu conteúdo digital. Construída com as mais recentes tecnologias web, oferece uma experiência segura, intuitiva e sem complicações para gerenciar e compartilhar arquivos na nuvem.
+O CloudNest é uma plataforma moderna de gerenciamento e compartilhamento de arquivos que revoluciona a forma como os usuários interagem com seu conteúdo digital. Construída com as mais recentes tecnologias web, oferece uma experiência segura, intuitiva e sem complicações para gerenciar e compartilhar arquivos na nuvem.
 
 ## ⚙️ Tecnologias
 
-- **Frontend**: React 19 com Next.js 15
-- **Backend**: Appwrite Cloud
-- **Estilização**: TailwindCSS com ShadCN
-- **Linguagem**: TypeScript
-- **Gerenciamento de Estado**: React Context API
-- **Autenticação**: Appwrite Auth
+- **Frontend**: 
+  - Next.js 15 com App Router
+  - React 19
+  - TypeScript 5
+- **Backend**: 
+  - Appwrite Cloud
+  - API de IA Hugging Face
+- **Estilização**: 
+  - TailwindCSS 3.4
+  - ShadcnUI
+  - Radix UI
+- **Gerenciamento de Estado**: 
+  - React Context API
+  - Server Actions
+- **Visualização de Dados**:
+  - Recharts
+- **Autenticação**: 
+  - Appwrite Auth com OTP
 
 ## 🔋 Funcionalidades
 
 - **Gerenciamento Inteligente de Arquivos**
-  - Organização avançada com categorização inteligente
-  - Suporte a operações em lote
-  - Histórico de versões
-
-- **Segurança Aprimorada**
-  - Criptografia ponta a ponta para arquivos sensíveis
-  - Autenticação de dois fatores
-  - Controles granulares de permissão
+  - Organização automática por tipo de arquivo
+  - Cálculo de armazenamento total por categoria
+  - Visualização de uso de espaço em tempo real
+  - Suporte a múltiplos formatos de arquivo
 
 - **Interface Moderna**
-  - Suporte a tema claro/escuro
-  - Design responsivo para todos os dispositivos
-  - Interface intuitiva com arrastar e soltar
+  - Design responsivo mobile-first
+  - Tema claro/escuro automático
+  - Animações suaves e feedback visual
+  - Painel interativo com gráficos
 
-- **Busca Inteligente**
-  - Capacidade de busca em texto completo
-  - Indexação de conteúdo de arquivos
-  - Opções avançadas de filtro
+- **Busca Avançada**
+  - Pesquisa em tempo real
+  - Filtros por tipo de arquivo
+  - Ordenação personalizada
+  - Visualização prévia de resultados
 
-- **Colaboração em Tempo Real**
-  - Compartilhamento de arquivos com permissões personalizáveis
-  - Suporte a espaço de trabalho em equipe
-  - Rastreamento de atividades e notificações
+- **Gerenciamento de Arquivos**
+  - Upload com arrastar e soltar
+  - Renomeação de arquivos
+  - Compartilhamento seguro
+  - Download direto
+  - Visualização de detalhes
 
 ## 🌟 Inovações
 
-CloudNest introduz várias características inovadoras que o destacam:
+O CloudNest apresenta várias características inovadoras:
 
 1. **Otimização Inteligente de Armazenamento**
-   - Detecção automática de duplicatas
-   - Algoritmos inteligentes de compressão
-   - Cache preditivo
+   - Monitoramento de uso em tempo real
+   - Gráficos interativos de utilização
+   - Análise de tendências de uso
 
 2. **Organização Baseada em IA**
-   - Categorização automática de arquivos
-   - Sugestões baseadas em conteúdo
-   - Sistema inteligente de tags
+   - Assistente de IA integrado
+   - Respostas contextuais
+   - Sugestões inteligentes
 
 3. **Medidas Avançadas de Segurança**
-   - Criptografia de conhecimento zero
-   - Integridade de arquivos verificada por blockchain
-   - Detecção avançada de ameaças
+   - Autenticação OTP
+   - Proteção contra uploads maliciosos
+   - Controle granular de permissões
 
 ## 🤸 Início Rápido
 
+### Pré-requisitos
+
+- Node.js (v18 ou superior)
+- npm (v9 ou superior)
+- Conta no Appwrite Cloud
+- Credenciais do projeto Appwrite
+
+### Passo a Passo
+
 1. **Clone o repositório**
 ```bash
-git clone https://github.com/heryckmp/cloudnest.git
-cd cloudnest
+git clone https://github.com/heryckmp/CloudNest.git
+cd CloudNest
 ```
 
 2. **Instale as dependências**
@@ -107,25 +128,50 @@ npm install
 ```
 
 3. **Configure as variáveis de ambiente**
-Crie um arquivo `.env.local`:
+   
+Crie um arquivo `.env.local` na raiz do projeto com:
+
 ```env
+# Configurações públicas (client-side)
 NEXT_PUBLIC_APPWRITE_ENDPOINT="https://cloud.appwrite.io/v1"
-NEXT_PUBLIC_APPWRITE_PROJECT=""
-NEXT_PUBLIC_APPWRITE_DATABASE=""
-NEXT_PUBLIC_APPWRITE_USERS_COLLECTION=""
-NEXT_PUBLIC_APPWRITE_FILES_COLLECTION=""
-NEXT_PUBLIC_APPWRITE_BUCKET=""
-NEXT_APPWRITE_KEY=""
+NEXT_PUBLIC_APPWRITE_PROJECT="sua_project_id_aqui"
+NEXT_PUBLIC_APPWRITE_DATABASE="sua_database_id_aqui"
+NEXT_PUBLIC_APPWRITE_USERS_COLLECTION="sua_collection_id_usuarios"
+NEXT_PUBLIC_APPWRITE_FILES_COLLECTION="sua_collection_id_arquivos"
+NEXT_PUBLIC_APPWRITE_BUCKET="sua_bucket_id_aqui"
+
+# Chave secreta (server-side apenas)
+NEXT_APPWRITE_KEY="sua_api_key_secreta_aqui"
 ```
 
-4. **Inicie o servidor de desenvolvimento**
+4. **Obtenha as credenciais do Appwrite**
+
+Siga estes passos para conseguir os valores:
+
+- **Endpoint**: Já pré-configurado (não altere)
+- **Project ID**: Painel do Appwrite → Configurações → Geral
+- **Database ID**: Appwrite → Bancos de Dados → Seu Banco → Configurações
+- **Collection IDs**: Dentro do Banco de Dados, clique em cada coleção → Configurações
+- **Bucket ID**: Appwrite → Armazenamento → Seu Bucket → Configurações
+- **API Key**: Appwrite → Visão Geral → Chaves de API → Criar Chave de API
+  - Selecione escopos: users.read, users.write, files.read, files.write
+
+5. **Inicie o servidor**
 ```bash
 npm run dev
 ```
 
+6. Acesse: `http://localhost:3000`
+
+### 💡 Dicas Importantes
+
+- Nunca faça commit de suas credenciais! O arquivo `.env.local` já está no `.gitignore` por padrão
+- Para ambientes de produção, use variáveis de ambiente no seu serviço de hospedagem
+- Em caso de erros de permissão, verifique os escopos da Chave de API no Appwrite
+
 ## 🎨 Sistema de Design
 
-CloudNest possui um sistema de design abrangente que garante consistência e acessibilidade:
+O CloudNest possui um sistema de design abrangente que garante consistência e acessibilidade:
 
 - **Paleta de Cores**: Cores cuidadosamente selecionadas para temas claro e escuro
 - **Tipografia**: Hierarquia de fontes moderna e legível
@@ -142,45 +188,48 @@ A segurança está no núcleo da arquitetura do CloudNest:
 - Protocolos seguros de compartilhamento de arquivos
 - Controle avançado de acesso
 
-## 🤖 Assistente AI
+## 🤖 Assistente IA
 
-O CloudNest agora inclui um assistente AI integrado que oferece:
+O CloudNest agora inclui um assistente de IA integrado que oferece:
 
-- **Chat Interativo**: Interface de chat amigável para interação com IA
+- **Chat Interativo**: Interface amigável para interação com IA
 - **Modelo Avançado**: Integração com o modelo BlenderBot da Hugging Face
 - **Respostas Contextuais**: Respostas inteligentes baseadas no contexto da conversa
 - **Tratamento de Erros**: Sistema robusto de tratamento de erros e feedback ao usuário
-- **Interface Responsiva**: Design adaptativo que funciona em qualquer dispositivo
+- **Interface Responsiva**: Design adaptativo para qualquer dispositivo
 
-Para usar o assistente AI:
-1. Navegue até a seção AI Assistant
+Para usar o assistente IA:
+1. Navegue até a seção Assistente IA
 2. Digite sua mensagem na caixa de texto
 3. Aguarde a resposta do assistente
 4. Continue a conversa naturalmente
 
 ## 🔄 Atualizações Recentes
 
-### Versão 0.2.0 (Fevereiro 2024)
+### Versão 0.3.0 (Março 2024)
 
-1. **Novo Assistente AI**
-   - Implementação do chat com IA usando Hugging Face
-   - Interface de usuário moderna e responsiva
-   - Sistema de tratamento de erros aprimorado
+1. **Melhorias no Painel**
+   - Novo gráfico de armazenamento com Recharts
+   - Visualização de atividade do usuário
+   - Cálculo de espaço usado por categoria
 
-2. **Melhorias na Interface**
-   - Novos ícones animados para tipos de arquivo
-   - Efeitos hover aprimorados nos cards
-   - Correções no tema escuro
+2. **Interface Aprimorada**
+   - Novo tema escuro otimizado
+   - Ícones animados para tipos de arquivo
+   - Menu de ações com três pontos
+   - Botão de logout com texto responsivo
 
-3. **Otimizações Técnicas**
-   - Migração para App Router do Next.js
-   - Melhor tratamento de erros na API
-   - Correções de tipagem TypeScript
+3. **Funcionalidades de Arquivo**
+   - Visualização prévia de imagens melhorada
+   - Suporte a mais tipos de arquivo
+   - Ordenação avançada de arquivos
+   - Busca em tempo real aprimorada
 
-4. **Segurança**
-   - Implementação segura de variáveis de ambiente
-   - Melhor proteção das chaves de API
-   - Validação aprimorada de requisições
+4. **Segurança e Desempenho**
+   - Autenticação OTP implementada
+   - Melhor tratamento de erros
+   - Otimização de carregamento
+   - Feedback visual aprimorado
 
 ---
 
