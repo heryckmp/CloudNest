@@ -206,7 +206,7 @@ Para usar o assistente IA:
 
 ## 🔄 Atualizações Recentes
 
-### Versão 0.3.0 (Março 2024)
+### Versão 0.3.0 (fev 2025)
 
 1. **Melhorias no Painel**
    - Novo gráfico de armazenamento com Recharts
