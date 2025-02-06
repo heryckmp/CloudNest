@@ -18,14 +18,13 @@ import { renameFile, updateFileUsers, deleteFile } from "@/lib/actions/file.acti
 import { useToast } from "@/components/ui/use-toast";
 import { constructDownloadUrl } from "@/lib/utils";
 import { usePathname } from "next/navigation";
-
-type ActionType = "rename" | "share" | "delete" | "details" | "download";
+import { FileActionType } from "@/types/file";
 
 const ActionDropdown = ({ file }: { file: Models.Document }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [action, setAction] = useState<ActionType | null>(null);
+  const [action, setAction] = useState<FileActionType | null>(null);
   const [newName, setNewName] = useState(file.name);
-  const [emails, setEmails] = useState<string[]>(file.users || []);
+  const [emails, setEmails] = useState<string[]>(file.users as string[] || []);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const path = usePathname() || "/";
@@ -34,10 +33,10 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
     setIsModalOpen(false);
     setAction(null);
     setNewName(file.name);
-    setEmails(file.users || []);
+    setEmails(file.users as string[] || []);
   };
 
-  const handleAction = async (value: ActionType) => {
+  const handleAction = async (value: FileActionType) => {
     if (value === "download") {
       window.open(constructDownloadUrl(file.bucketFileId), "_blank");
       return;
@@ -107,6 +106,10 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
     }
   };
 
+  const handleClick = (value: FileActionType) => {
+    handleAction(value).catch(console.error);
+  };
+
   const renderDialogContent = () => {
     if (!isModalOpen) return null;
 
@@ -134,7 +137,7 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
                 <Button variant="outline" onClick={closeAllModals}>
                   Cancelar
                 </Button>
-                <Button onClick={() => handleAction("rename")} disabled={isLoading}>
+                <Button onClick={() => handleClick("rename")} disabled={isLoading}>
                   {isLoading ? "Renomeando..." : "Renomear"}
                 </Button>
               </div>
@@ -150,7 +153,7 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
                 </Button>
                 <Button 
                   variant="destructive" 
-                  onClick={() => handleAction("delete")}
+                  onClick={() => handleClick("delete")}
                   disabled={isLoading}
                 >
                   {isLoading ? "Excluindo..." : "Excluir"}
@@ -181,7 +184,7 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
           {actionsDropdownItems.map(({ label, icon, value }) => (
             <DropdownMenuItem
               key={value}
-              onClick={() => handleAction(value as ActionType)}
+              onClick={() => handleClick(value as FileActionType)}
               className="flex cursor-pointer items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
             >
               <Image src={icon} alt={label} width={16} height={16} />

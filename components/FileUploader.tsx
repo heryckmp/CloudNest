@@ -24,144 +24,145 @@ const FileUploader = ({ ownerId, accountId, className }: Props) => {
   const [files, setFiles] = useState<File[]>([]);
   const [uploadingFiles, setUploadingFiles] = useState<Set<string>>(new Set());
 
-  const onDrop = useCallback(
-    async (acceptedFiles: File[]) => {
-      console.log('Files dropped:', acceptedFiles.map(f => ({ 
-        name: f.name, 
-        size: f.size, 
-        type: f.type,
-        lastModified: f.lastModified
-      })));
+  const onDrop = useCallback((acceptedFiles: File[]) => {
+    handleFileDrop(acceptedFiles).catch(console.error);
+  }, []);
 
-      for (const file of acceptedFiles) {
-        if (file.size > MAX_FILE_SIZE) {
-          console.log('File too large:', { 
-            name: file.name, 
-            size: file.size, 
-            maxSize: MAX_FILE_SIZE 
-          });
+  const handleFileDrop = async (acceptedFiles: File[]) => {
+    console.log('Files dropped:', acceptedFiles.map(f => ({ 
+      name: f.name, 
+      size: f.size, 
+      type: f.type,
+      lastModified: f.lastModified
+    })));
 
-          toast({
-            description: (
-              <p className="text-sm font-normal text-white">
-                <span className="font-semibold">{file.name}</span> is too large.
-                Max file size is 50MB.
-              </p>
-            ),
-            className: "bg-destructive",
-          });
-          continue;
-        }
-
-        setFiles((prev) => [...prev, file]);
-        setUploadingFiles((prev) => new Set(prev).add(file.name));
-
-        console.log('Starting upload for file:', { 
+    for (const file of acceptedFiles) {
+      if (file.size > MAX_FILE_SIZE) {
+        console.log('File too large:', { 
           name: file.name, 
-          size: file.size,
-          type: file.type,
-          lastModified: file.lastModified
+          size: file.size, 
+          maxSize: MAX_FILE_SIZE 
         });
 
-        try {
-          console.log('Calling uploadFile function with:', {
-            fileName: file.name,
-            fileType: file.type,
-            ownerId,
-            accountId,
-            path
-          });
-          
-          const success = await uploadFile({ 
-            file, 
-            ownerId, 
-            accountId, 
-            path: path || '/'
-          });
-          
-          console.log('Upload result:', { 
-            fileName: file.name, 
-            success,
+        toast({
+          description: (
+            <p className="text-sm font-normal text-white">
+              <span className="font-semibold">{file.name}</span> is too large.
+              Max file size is 50MB.
+            </p>
+          ),
+          className: "bg-destructive",
+        });
+        continue;
+      }
+
+      setFiles((prev) => [...prev, file]);
+      setUploadingFiles((prev) => new Set(prev).add(file.name));
+
+      console.log('Starting upload for file:', { 
+        name: file.name, 
+        size: file.size,
+        type: file.type,
+        lastModified: file.lastModified
+      });
+
+      try {
+        console.log('Calling uploadFile function with:', {
+          fileName: file.name,
+          fileType: file.type,
+          ownerId,
+          accountId,
+          path
+        });
+        
+        const success = await uploadFile({ 
+          file, 
+          ownerId, 
+          accountId, 
+          path: path || '/'
+        });
+        
+        console.log('Upload result:', { 
+          fileName: file.name, 
+          success,
+          fileInfo: {
+            size: file.size,
+            type: file.type,
+            lastModified: file.lastModified
+          }
+        });
+        
+        if (!success) {
+          throw new Error("Failed to upload file");
+        }
+
+        toast({
+          description: (
+            <p className="text-sm font-normal text-white">
+              <span className="font-semibold">{file.name}</span> uploaded successfully!
+            </p>
+          ),
+          className: "bg-green-500",
+        });
+      } catch (error: unknown) {
+        let errorMessage = "Falha ao fazer upload do arquivo. Por favor, tente novamente.";
+        
+        if (error instanceof Error) {
+          console.error(`Error uploading ${file.name}:`, {
+            message: error.message,
+            stack: error.stack,
             fileInfo: {
               size: file.size,
               type: file.type,
-              lastModified: file.lastModified
-            }
+              lastModified: file.lastModified,
+            },
           });
-          
-          if (!success) {
-            throw new Error("Failed to upload file");
-          }
-
-          toast({
-            description: (
-              <p className="text-sm font-normal text-white">
-                <span className="font-semibold">{file.name}</span> uploaded successfully!
-              </p>
-            ),
-            className: "bg-green-500",
-          });
-        } catch (error: unknown) {
-          let errorMessage = "Falha ao fazer upload do arquivo. Por favor, tente novamente.";
-          
-          if (error instanceof Error) {
-            console.error(`Error uploading ${file.name}:`, {
-              message: error.message,
-              stack: error.stack,
-              fileInfo: {
-                size: file.size,
-                type: file.type,
-                lastModified: file.lastModified,
-              },
-            });
-            errorMessage = error.message;
-          } else {
-            console.error(`Unknown error uploading ${file.name}:`, {
-              error,
-              fileInfo: {
-                size: file.size,
-                type: file.type,
-                lastModified: file.lastModified,
-              },
-            });
-          }
-          
-          toast({
-            description: (
-              <p className="text-sm font-normal text-white">
-                {errorMessage}
-              </p>
-            ),
-            className: "bg-destructive",
-          });
-        } finally {
-          console.log('Cleaning up file states:', file.name);
-          setFiles((prevFiles) => prevFiles.filter((f) => f.name !== file.name));
-          setUploadingFiles((prev) => {
-            const newSet = new Set(prev);
-            newSet.delete(file.name);
-            return newSet;
+          errorMessage = error.message;
+        } else {
+          console.error(`Unknown error uploading ${file.name}:`, {
+            error,
+            fileInfo: {
+              size: file.size,
+              type: file.type,
+              lastModified: file.lastModified,
+            },
           });
         }
+        
+        toast({
+          description: (
+            <p className="text-sm font-normal text-white">
+              {errorMessage}
+            </p>
+          ),
+          className: "bg-destructive",
+        });
+      } finally {
+        console.log('Cleaning up file states:', file.name);
+        setFiles((prevFiles) => prevFiles.filter((f) => f.name !== file.name));
+        setUploadingFiles((prev) => {
+          const newSet = new Set(prev);
+          newSet.delete(file.name);
+          return newSet;
+        });
       }
-    },
-    [ownerId, accountId, path, toast]
-  );
+    }
+  };
 
   const { getRootProps, getInputProps } = useDropzone({ 
     onDrop,
     maxSize: MAX_FILE_SIZE,
     accept: {
       'image/*': ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'],
-      'video/*': ['.mp4', '.avi', '.mov', '.mkv', '.webm'],
-      'audio/*': ['.mp3', '.wav', '.ogg', '.flac'],
+      'video/*': ['.mp4', '.avi', '.mov', '.wmv'],
+      'audio/*': ['.mp3', '.wav', '.ogg'],
       'application/pdf': ['.pdf'],
       'application/msword': ['.doc'],
       'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
-      'text/plain': ['.txt'],
       'application/vnd.ms-excel': ['.xls'],
       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'],
-      'text/csv': ['.csv']
+      'application/vnd.ms-powerpoint': ['.ppt'],
+      'application/vnd.openxmlformats-officedocument.presentationml.presentation': ['.pptx'],
     }
   });
 
