@@ -101,20 +101,35 @@ const FileUploader = ({ ownerId, accountId, className }: Props) => {
             ),
             className: "bg-green-500",
           });
-        } catch (error) {
-          console.error(`Error uploading ${file.name}:`, {
-            error,
-            fileInfo: {
-              size: file.size,
-              type: file.type,
-              lastModified: file.lastModified
-            }
-          });
+        } catch (error: unknown) {
+          let errorMessage = "Falha ao fazer upload do arquivo. Por favor, tente novamente.";
+          
+          if (error instanceof Error) {
+            console.error(`Error uploading ${file.name}:`, {
+              message: error.message,
+              stack: error.stack,
+              fileInfo: {
+                size: file.size,
+                type: file.type,
+                lastModified: file.lastModified,
+              },
+            });
+            errorMessage = error.message;
+          } else {
+            console.error(`Unknown error uploading ${file.name}:`, {
+              error,
+              fileInfo: {
+                size: file.size,
+                type: file.type,
+                lastModified: file.lastModified,
+              },
+            });
+          }
           
           toast({
             description: (
               <p className="text-sm font-normal text-white">
-                Failed to upload <span className="font-semibold">{file.name}</span>. Please try again.
+                {errorMessage}
               </p>
             ),
             className: "bg-destructive",
@@ -135,7 +150,19 @@ const FileUploader = ({ ownerId, accountId, className }: Props) => {
 
   const { getRootProps, getInputProps } = useDropzone({ 
     onDrop,
-    maxSize: MAX_FILE_SIZE
+    maxSize: MAX_FILE_SIZE,
+    accept: {
+      'image/*': ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'],
+      'video/*': ['.mp4', '.avi', '.mov', '.mkv', '.webm'],
+      'audio/*': ['.mp3', '.wav', '.ogg', '.flac'],
+      'application/pdf': ['.pdf'],
+      'application/msword': ['.doc'],
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
+      'text/plain': ['.txt'],
+      'application/vnd.ms-excel': ['.xls'],
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'],
+      'text/csv': ['.csv']
+    }
   });
 
   const handleRemoveFile = (

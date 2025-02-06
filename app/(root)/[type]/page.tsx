@@ -1,9 +1,9 @@
 import React from "react";
 import Sort from "@/components/Sort";
-import { getFiles } from "@/lib/actions/file.actions";
+import { getFiles, getTotalSpaceUsed } from "@/lib/actions/file.actions";
 import { Models } from "node-appwrite";
 import Card from "@/components/Card";
-import { getFileTypesParams } from "@/lib/utils";
+import { getFileTypesParams, formatStorageSize } from "@/lib/utils";
 import { CardSkeleton } from "@/components/CardSkeleton";
 
 const Page = async ({ searchParams, params }: SearchParamProps) => {
@@ -12,8 +12,26 @@ const Page = async ({ searchParams, params }: SearchParamProps) => {
   const sort = ((await searchParams)?.sort as string) || "";
 
   const types = getFileTypesParams(type) as FileType[];
-
+  const totalSpace = await getTotalSpaceUsed();
   const files = await getFiles({ types, searchText, sort });
+
+  // Calcula o total de armazenamento usado para o tipo atual
+  const calculateTotalSize = () => {
+    if (!totalSpace) return 0;
+    
+    switch (type) {
+      case "documents":
+        return totalSpace.document.size;
+      case "images":
+        return totalSpace.image.size;
+      case "media":
+        return totalSpace.video.size + totalSpace.audio.size;
+      case "others":
+        return totalSpace.other.size;
+      default:
+        return 0;
+    }
+  };
 
   return (
     <div className="container mx-auto p-6">
@@ -27,7 +45,7 @@ const Page = async ({ searchParams, params }: SearchParamProps) => {
 
         <div className="mb-8 flex items-center justify-between">
           <p className="text-base font-medium text-gray-700 dark:text-gray-300">
-            Total: <span className="text-xl font-bold">0 MB</span>
+            Total: <span className="text-xl font-bold">{formatStorageSize(calculateTotalSize())}</span>
           </p>
 
           <div className="flex items-center gap-4">
